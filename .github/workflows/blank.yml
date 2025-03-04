@@ -31,7 +31,6 @@ jobs:
           
           mkdir -p ${{ github.workspace }}/web
           
-          cd ../
           cp -r ./out/* ${{ github.workspace }}/web/
           
           echo "Action desplegant a produccio" > ${{ github.workspace }}/web/last_deploy.txt
