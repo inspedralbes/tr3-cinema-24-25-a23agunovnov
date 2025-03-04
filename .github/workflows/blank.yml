@@ -1,9 +1,6 @@
 name: Preparant per producció
 run-name: ${{ github.actor }} està pujant l'aplicació a PROD 🚀
-on:
-  push:
-    branches:
-      - main
+on: [PUSH]
 jobs:
   Pujar-a-produccio-amb-SCP:
     runs-on: ubuntu-latest
@@ -19,6 +16,7 @@ jobs:
 
       - name: Verificar conexión SSH
         run: |
+          echo "${{ secrets.PROD_KEY }}" > /home/runner/prod_key.pem
           ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "echo 'Conexión SSH exitosa'"
       
       - name: Preparar archivos locales
