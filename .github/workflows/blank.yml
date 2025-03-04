@@ -1,0 +1,44 @@
+name: Preparant per producció
+run-name: ${{ github.actor }} està pujant l'aplicació a PROD 🚀
+on:
+  push:
+    branches:
+      - main
+jobs:
+  Pujar-a-produccio-amb-SCP:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtenint el codi del respositori
+        uses: actions/checkout@v4
+
+      - name: Verificar variables de entorno
+        run: |
+          echo "PROD_USER: ${{ secrets.PROD_USER }}"
+          echo "PROD_HOST: ${{ secrets.PROD_HOST }}"
+
+      - name: scp a produccio
+        run: |
+          echo "${{ secrets.PROD_KEY }}" > ~/prod_key.pem
+          chmod 600 ~/prod_key.pem
+          cd ${{ github.workspace }}
+          
+          cd front/next/
+          npm install
+          npm run build
+          
+          mkdir -p ./web
+          
+          cd ../
+          cp -r ./front/next/.next/* ${{ github.workspace }}/web/
+          cp -r ./front/next/public/* ${{ github.workspace }}/web/public/
+          cp -r ./front/next/package.json ${{ github.workspace }}/web/package.json
+          if [ -f "./front/next/next.config.mjs" ]; then
+            cp ./front/next/next.config.mjs ${{ github.workspace }}/web/next.config.mjs
+          fi
+          
+          echo "Action desplegant a produccio" > ./web/last_deploy.txt
+          date >> ./web/last_deploy.txt
+          
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ${{ github.workspace }}/web/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a23agunovnov/web/a23agunovnov.daw.inspedralbes.cat/public_html/cinetix
+
+      - run: echo "🍏 This job's status is ${{ job.status }}."
