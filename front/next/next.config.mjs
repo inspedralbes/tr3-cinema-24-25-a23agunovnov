@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-    basePath: '/cinetix'
+    basePath: '/cinetix',
 };
 
 export default nextConfig;
