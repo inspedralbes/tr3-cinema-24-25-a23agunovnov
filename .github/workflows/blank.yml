@@ -17,6 +17,8 @@ jobs:
       - name: Verificar conexión SSH
         run: |
           echo "${{ secrets.PROD_KEY }}" > /home/runner/prod_key.pem
+          chmod 600 /home/runner/prod_key.pem
+          ls -l /home/runner/prod_key.pem
           ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "echo 'Conexión SSH exitosa'"
       
       - name: Preparar archivos locales
