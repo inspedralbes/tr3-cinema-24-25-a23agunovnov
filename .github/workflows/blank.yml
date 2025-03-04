@@ -29,11 +29,11 @@ jobs:
           mkdir -p ./web
           
           cd ../
-          cp -r ./front/next/.next/* ${{ github.workspace }}/web/
-          cp -r ./front/next/public/* ${{ github.workspace }}/web/public/
-          cp -r ./front/next/package.json ${{ github.workspace }}/web/package.json
-          if [ -f "./front/next/next.config.mjs" ]; then
-            cp ./front/next/next.config.mjs ${{ github.workspace }}/web/next.config.mjs
+          cp -r ./next/.next/* ${{ github.workspace }}/web/
+          cp -r ./next/public/* ${{ github.workspace }}/web/public/
+          cp -r ./next/package.json ${{ github.workspace }}/web/package.json
+          if [ -f "./next/next.config.mjs" ]; then
+            cp ./next/next.config.mjs ${{ github.workspace }}/web/next.config.mjs
           fi
           
           echo "Action desplegant a produccio" > ./web/last_deploy.txt
