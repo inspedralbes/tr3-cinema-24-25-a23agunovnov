@@ -32,8 +32,8 @@ jobs:
           mkdir -p ${{ github.workspace }}/web
           
           cd ../
-          mkdir -p ${{ github.workspace }}/web/.next
-          cp -r ./next/.next/* ${{ github.workspace }}/web/.next
+          # mkdir -p ${{ github.workspace }}/web/.next
+          cp -r ./next/.next/ ${{ github.workspace }}/web/
           
           mkdir -p ${{ github.workspace }}/web/public
           cp -r ./next/public/* ${{ github.workspace }}/web/public/
