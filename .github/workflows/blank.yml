@@ -32,16 +32,7 @@ jobs:
           mkdir -p ${{ github.workspace }}/web
           
           cd ../
-          mkdir -p ${{ github.workspace }}/web/next
-          cp -r ./next/.next/* ${{ github.workspace }}/web/next
-          
-          mkdir -p ${{ github.workspace }}/web/public
-          cp -r ./next/public/* ${{ github.workspace }}/web/public/
-
-          cp -r ./next/package.json ${{ github.workspace }}/web/package.json
-          if [ -f "./next/next.config.mjs" ]; then
-            cp ./next/next.config.mjs ${{ github.workspace }}/web/next.config.mjs
-          fi
+          cp -r ./out/* ${{ github.workspace }}/web/
           
           echo "Action desplegant a produccio" > ${{ github.workspace }}/web/last_deploy.txt
           date >> ${{ github.workspace }}/web/last_deploy.txt
