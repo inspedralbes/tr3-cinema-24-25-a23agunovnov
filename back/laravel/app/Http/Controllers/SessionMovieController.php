@@ -32,6 +32,7 @@ class SessionMovieController extends Controller
         try {
             $validated = $request->validate([
                 'imdb' => 'required|string',
+                'title' => 'required|string',
                 'time' => 'required|string'
             ]);
 
@@ -50,6 +51,7 @@ class SessionMovieController extends Controller
 
             $session = SessionMovie::create([
                 'imdb' => $validated['imdb'],
+                'title' => $validated['title'],
                 'time' => $validated['time'],
                 'seats' => json_encode($seats)
             ]);

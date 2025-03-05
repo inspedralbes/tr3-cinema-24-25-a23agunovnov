@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('imdb');
+            $table->string('title');
             $table->string('time');
             $table->json('seats');
         });
