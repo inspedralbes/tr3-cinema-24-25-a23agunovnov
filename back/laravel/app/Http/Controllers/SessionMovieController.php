@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\SessionMovie;
+use DateTime;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class SessionMovieController extends Controller
 {
@@ -33,12 +35,13 @@ class SessionMovieController extends Controller
             $validated = $request->validate([
                 'imdb' => 'required|string',
                 'title' => 'required|string',
-                'time' => 'required|string'
+                'time' => 'required|string',
+                'date' => 'required|date'
             ]);
 
             $seat_id = 0;
-            for ($i=1; $i <= 12; $i++) {
-                for ($j=0; $j < 10; $j++) { 
+            for ($i = 1; $i <= 12; $i++) {
+                for ($j = 0; $j < 10; $j++) {
                     $seat_id++;
                     $seat = [
                         'id' => $seat_id,
@@ -53,10 +56,11 @@ class SessionMovieController extends Controller
                 'imdb' => $validated['imdb'],
                 'title' => $validated['title'],
                 'time' => $validated['time'],
+                'date' => $validated['date'],
                 'seats' => json_encode($seats)
             ]);
 
-            if(!$session){
+            if (!$session) {
                 return response()->json(['success' => false, 'message' => 'We have a problem'], 500);
             }
 
