@@ -75,28 +75,56 @@ export default function Page() {
           </div>
         </div>
       </header>
-      <div className="w-full grid md:grid-cols-2 gap-5 mt-2">
-        <div className="border h-[70vh] md:ml-5">
-          <form action={crearSesion}>
-            <input type="text" name="imdb" placeholder="IMDB" onChange={(e) => setImdb(e.target.value)} />
-            <input type="text" placeholder="Nombre de la función" readOnly defaultValue={movieName} />
-            <select name="time" id="horario">
-              <option value="">Seleccione un horario</option>
+      <div className="w-full grid md:grid-cols-2 gap-5 mt-5">
+        <div className="bg-white rounded-lg shadow-md p-3 h-[70vh] md:ml-5">
+          <form action={crearSesion} className="space-y-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              IMDB
+            </label>
+            <input type="text" name="imdb" className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required onChange={(e) => setImdb(e.target.value)} />
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Título de la película
+            </label>
+            <input type="text" className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required readOnly defaultValue={movieName} />
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Seleccione un horario
+            </label>
+            <select name="time" id="horario" className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required >
+              <option value=""></option>
               <option value="16:00">16:00</option>
               <option value="18:00">18:00</option>
               <option value="20:00">20:00</option>
             </select>
-            <input type="date" name="date" id="date" />
-            <input type="submit" value="Crear sesión" />
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Fecha de la función
+            </label>
+            <input type="date" name="date" className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required id="date" />
+            <input type="submit" value="Crear sesión" className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors" />
           </form>
         </div>
-        <div className="border h-[70vh] md:mr-5">
+        <div className="bg-white rounded-lg shadow-md p-3 h-[70vh] md:mr-5">
           {!loading ?
             (
               <ul>
                 {sesions.data.length > 0 ? (
                   sesions.data.map((sesion, index) => (
-                    <li key={index}>{sesion.title}</li>
+                    <div
+                      key={sesion.id}
+                      className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                    >
+                      <h3 className="font-semibold text-lg mb-2">{sesion.title}</h3>
+                      <div className="space-y-1 text-sm text-gray-600">
+                        <div className="flex items-center gap-2">
+                          <span>{sesion.date}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span>{sesion.time}</span>
+                        </div>
+                        {/* <div className="flex items-center gap-2">
+                        <span>{sesion.seats} asientos</span>
+                      </div> */}
+                      </div>
+                    </div>
                   ))
                 ) : (
                   <h1>No se encuentran resultados</h1>

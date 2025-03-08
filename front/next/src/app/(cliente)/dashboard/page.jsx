@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import { sessionCreate, searchMovie } from '../../plugins/communicationManager'
+import { viewSessions } from "@/app/plugins/communicationManager";
 import MovieComp from '../../../components/MovieComp';
 import { useRouter } from 'next/navigation'
 
@@ -9,6 +9,7 @@ export default function Page() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [sesions, setSesions] = useState([]);
   const router = useRouter();
 
   async function buscarMovie() {
@@ -21,10 +22,21 @@ export default function Page() {
 
   useEffect(() => {
     (async () => {
-      // const response = await sessionCreate("tt3896198");
+      await verSesiones();
+      setLoading(false);
     })();
-  }, [])
-  console.log("PELI: ", movies);
+  }, []);
+
+  async function verSesiones() {
+    try {
+      const response = await viewSessions();
+      console.log("Response: ", response);
+      setSesions(response);
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  }
+
   return (
     <>
       <div className="min-h-screen bg-gray-100">
@@ -33,7 +45,6 @@ export default function Page() {
             <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
           </div>
 
-          {/* Logo and Search */}
           <div className="relative z-10 w-full max-w-6xl mx-auto px-4">
             <div className="flex items-center justify-center flex-col space-y-8">
               <div className="flex items-center space-x-3 text-white mb-4">
@@ -56,13 +67,18 @@ export default function Page() {
         </div>
         <main className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-            {!loading && movies.Response === 'True' ? (
-              movies.Search.map((movie) => (
-                <MovieComp key={movie.imdbID} movie={movie} />
-              ))
-            ) : (
-              <p>{movies.Error}</p>
-            )
+            {!loading ?
+              (
+                sesions.data.length > 0 ? (
+                  sesions.data.map((movie, index) => (
+                    <MovieComp key={index} movie={movie} />
+                  ))
+                ) : (
+                  <h1>No se encuentran resultados</h1>
+                )
+              ) : (
+                <h1>Cargando resultados</h1>
+              )
             }
           </div>
         </main>

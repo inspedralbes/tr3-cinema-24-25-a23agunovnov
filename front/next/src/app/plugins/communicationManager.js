@@ -59,7 +59,6 @@ export async function searchMovie(title) {
 export async function viewSessions() {
     try {
         const response = await fetch(`${Host}/session`);
-        console.log("ENTRAAA")
         const data = response.json();
 
         return data;
