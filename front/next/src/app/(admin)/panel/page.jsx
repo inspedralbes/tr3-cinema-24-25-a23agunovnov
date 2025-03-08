@@ -1,26 +1,37 @@
 'use client'
-import { sessionCreate, getInfoMovie } from "@/app/plugins/communicationManager";
+import { sessionCreate, getInfoMovie, viewSessions } from "@/app/plugins/communicationManager";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   const [imdb, setImdb] = useState('');
   const [movie, setMovie] = useState([]);
   const [movieName, setMovieName] = useState('');
-  
+  const [sesions, setSesions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    console.log(movie.Title);
+    (async () => {
+      // console.log("Entra")
+      await verSesiones();
+      setLoading(false);
+    })();
+  }, []);
+
+  useEffect(() => {
     setMovieName(movie.Title || '');
   }, [movie]);
 
   useEffect(() => {
     (async () => {
-      console.log("IMDB: ",imdb);
-      const response = await getInfoMovie(imdb);
-      console.log(response);
-      if(response.Response === 'True'){
-        setMovie(response);
-      }else{
-        console.log("No existe ninguna pelicula con ese IMDB");
+      if (imdb !== '') {
+        console.log("IMDB: ", imdb);
+        const response = await getInfoMovie(imdb);
+        console.log(response);
+        if (response.Response === 'True') {
+          setMovie(response);
+        } else {
+          console.log("No existe ninguna pelicula con ese IMDB");
+        }
       }
     })();
   }, [imdb])
@@ -33,14 +44,25 @@ export default function Page() {
       "imdb": imdbID,
       "title": movieName,
       "time": time,
-      "date": date, 
+      "date": date,
     }
     console.log("sesionData: ", sesionData);
     try {
       const response = await sessionCreate(sesionData);
       console.log(response);
+      verSesiones();
     } catch (error) {
       console.error("Error try-catch: ", error);
+    }
+  }
+
+  async function verSesiones() {
+    try {
+      const response = await viewSessions();
+      console.log("Response: ", response);
+      setSesions(response);
+    } catch (error) {
+      console.error("Error: ", error);
     }
   }
 
@@ -69,7 +91,21 @@ export default function Page() {
           </form>
         </div>
         <div className="border h-[70vh] md:mr-5">
-
+          {!loading ?
+            (
+              <ul>
+                {sesions.data.length > 0 ? (
+                  sesions.data.map((sesion, index) => (
+                    <li key={index}>{sesion.title}</li>
+                  ))
+                ) : (
+                  <h1>No se encuentran resultados</h1>
+                )}
+              </ul>
+            ) : (
+              <h1>Cargando resultados</h1>
+            )
+          }
         </div>
       </div>
     </>

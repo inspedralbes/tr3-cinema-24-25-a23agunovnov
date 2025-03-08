@@ -15,7 +15,12 @@ class SessionMovieController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $sesiones = SessionMovie::all();
+            return response()->json(['success' => true, 'data' => $sesiones]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'We have a problem try-catch: ' . $e->getMessage()], 500);
+        }
     }
 
     /**

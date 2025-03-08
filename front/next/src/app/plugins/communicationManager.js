@@ -55,3 +55,15 @@ export async function searchMovie(title) {
     const data = response.json();
     return data;
 }
+
+export async function viewSessions() {
+    try {
+        const response = await fetch(`${Host}/session`);
+        console.log("ENTRAAA")
+        const data = response.json();
+
+        return data;
+    } catch (error) {
+        console.error("Error: ", error);
+    }
+}
