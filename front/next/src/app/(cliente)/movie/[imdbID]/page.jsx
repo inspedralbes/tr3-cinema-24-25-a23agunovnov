@@ -10,7 +10,7 @@ export default function MoviePage() {
     const [sesion, setSesion] = useState([]);
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
-    const [chooseSeats, setChooseSeats] = useState(true);
+    const [chooseSeats, setChooseSeats] = useState(false);
     const [clickedSeats, setClickedSeats] = useState([]);
 
     useEffect(() => {
