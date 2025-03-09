@@ -1,8 +1,12 @@
 'use client'
 
+import { useRouter } from "next/navigation"
+
 export default function MovieComp(props) {
+    const router = useRouter();
+
     return <>
-        <div className="group relative rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105">
+        <div onClick={() => router.push(`/movie/${props.movie.imdbID}`)} className="group relative rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105 cursor-pointer">
             <img
                 src={props.movie.Poster}
                 alt={props.movie.Title}

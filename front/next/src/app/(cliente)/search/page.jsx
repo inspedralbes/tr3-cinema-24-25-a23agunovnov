@@ -70,27 +70,6 @@ export default function Page() {
         }
     }, [movies,currentPage])
 
-
-    // useEffect(() => {
-    //     async function getMovies() {
-    //         const response = await searchMovie(searchTerm);
-    //         if (response && response.Response === 'True') {
-    //             console.log("API: ", response);
-    //         } else {
-    //             console.log(response);
-    //         }
-    //     }
-    //     // (async () => {
-    //     //     const response = await searchMovie(searchTerm);
-    //     //     console.log(response)
-    //     //     setMovies(response);
-    //     // })();
-    //     // if (movies.Search.length > 0) {
-    //     //     setCurrentMovies(movies.Search.slice(startIndex, startIndex + moviesPerPage));
-    //     // }
-    //     if (searchTerm) getMovies();
-    // }, [searchTerm])
-
     return <>
         <div className="min-h-screen bg-gray-100">
             <div className="bg-white shadow-sm sticky top-0 z-50">

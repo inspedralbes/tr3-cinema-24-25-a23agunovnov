@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import { viewSessions } from "@/app/plugins/communicationManager";
+import { viewSessions, getInfoMovie } from "@/app/plugins/communicationManager";
 import MovieComp from '../../../components/MovieComp';
 import { useRouter } from 'next/navigation'
 
@@ -22,10 +22,25 @@ export default function Page() {
 
   useEffect(() => {
     (async () => {
+      await cargarInfoSesiones();
+    })();
+  }, [sesions])
+
+  useEffect(() => {
+    (async () => {
       await verSesiones();
       setLoading(false);
     })();
   }, []);
+
+  async function cargarInfoSesiones() {
+    if (sesions.data) {
+      for (let i = 0; i < sesions.data.length; i++) {
+        const newValue = await getInfoMovie(sesions.data[i].imdb);
+        setMovies(prevValue => [...prevValue, newValue]);
+      }
+    }
+  }
 
   async function verSesiones() {
     try {
@@ -69,8 +84,8 @@ export default function Page() {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
             {!loading ?
               (
-                sesions.data.length > 0 ? (
-                  sesions.data.map((movie, index) => (
+                movies.length > 0 ? (
+                  movies.map((movie, index) => (
                     <MovieComp key={index} movie={movie} />
                   ))
                 ) : (

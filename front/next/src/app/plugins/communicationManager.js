@@ -66,3 +66,13 @@ export async function viewSessions() {
         console.error("Error: ", error);
     }
 }
+
+export async function getSession(imdb) {
+    try {
+        const response = await fetch(`${Host}/session/${imdb}`);
+        const data = response.json();
+        return data;
+    } catch (error) {
+        console.error("Error: ", error);
+    }
+}

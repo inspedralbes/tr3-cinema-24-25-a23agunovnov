@@ -79,9 +79,10 @@ class SessionMovieController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Session $session)
+    public function show(String $imdbID)
     {
-        //
+        $session = SessionMovie::where('imdb', $imdbID)->get()->first();
+        return response()->json(['success' => true, 'data' => $session ], 200);
     }
 
     /**

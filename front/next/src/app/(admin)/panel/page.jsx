@@ -50,6 +50,7 @@ export default function Page() {
     try {
       const response = await sessionCreate(sesionData);
       console.log(response);
+      setMovieName('');
       verSesiones();
     } catch (error) {
       console.error("Error try-catch: ", error);
