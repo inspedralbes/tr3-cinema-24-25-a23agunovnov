@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { getInfoMovie, getSession, comprarTicket } from "@/app/plugins/communicationManager";
 import SearchComp from '@/components/SearchComp';
+import AuthComp from "@/components/AuthComp";
 import { useEffect, useState } from "react";
 
 export default function MoviePage() {
@@ -12,6 +13,8 @@ export default function MoviePage() {
     const [selectedTime, setSelectedTime] = useState('');
     const [chooseSeats, setChooseSeats] = useState(false);
     const [clickedSeats, setClickedSeats] = useState([]);
+    const [loginAuth, setLoginAuth] = useState(false);
+    const [isLogged, setIsLogged] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -64,15 +67,18 @@ export default function MoviePage() {
             if (trobat && trobat.available) {
                 trobat.available = false;
                 seats[trobat.id - 1] = trobat;
-                console.log(seats);
             } else {
                 isOk = false;
             }
         });
         if (isOk) {
-            const response = await comprarTicket(imdbID, seats);
-            console.log(response);
-            await cargarData();
+            if (isLogged) {
+                const response = await comprarTicket(imdbID, seats);
+                console.log(response);
+                await cargarData();
+            } else {
+                setLoginAuth(true);
+            }
         } else {
             if (confirm("Has seleccionado un asiento ya ocupado, recarga la página")) {
                 window.location.replace('');
@@ -81,6 +87,7 @@ export default function MoviePage() {
     }
 
     return <>
+        { loginAuth && <AuthComp /> }
         <SearchComp />
         <div className="w-full h-screen bg-[#1a1a1a] flex justify-center text-white">
             <div className="h-full w-full max-w-7xl">
