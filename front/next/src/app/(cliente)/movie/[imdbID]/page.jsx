@@ -154,7 +154,7 @@ export default function MoviePage() {
                     <div className="bg-[#1a1a1a] rounded-lg w-[18rem]">
                         <h2 className="text-2xl font-bold mb-6">Reservar Tickets</h2>
 
-                        <div className="mb-6">
+                        <div className="mb-3">
                             <label className="block text-sm font-medium mb-2">Selecciona fecha</label>
                             <div className="grid grid-cols-2 gap-2">
                                 <button
