@@ -15,7 +15,7 @@ export async function sessionCreate(sesionData) {
             const response = await fetch(`${Host}/session`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json' // Importante para que el servidor lo interprete como JSON
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     "imdb": sesionData.imdb,
@@ -74,5 +74,24 @@ export async function getSession(imdb) {
         return data;
     } catch (error) {
         console.error("Error: ", error);
+    }
+}
+
+export async function comprarTicket(imdbID, seats) {
+    try {
+        const response = await fetch(`${Host}/session/${imdbID}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "seats": seats
+            })
+        });
+        const data = response.json();
+        return data;
+    } catch (error) {
+        console.error("Error: ", error);
+        return null;
     }
 }

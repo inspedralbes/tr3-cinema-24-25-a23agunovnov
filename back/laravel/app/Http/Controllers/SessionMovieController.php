@@ -96,9 +96,18 @@ class SessionMovieController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Session $session)
+    public function update(Request $request, String $imdbID)
     {
-        //
+        try {
+            $session = SessionMovie::where('imdb', $imdbID)->get()->first();
+            $session->seats = $request->seats;
+            $session->save();
+
+            return response()->json(['success' => true,'message' => $session], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => 'We have a problem try-catch: ' . $e->getMessage()], 500);
+        }
     }
 
     /**

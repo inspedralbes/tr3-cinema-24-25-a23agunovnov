@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
-import { getInfoMovie, getSession } from "@/app/plugins/communicationManager";
+import { getInfoMovie, getSession, comprarTicket } from "@/app/plugins/communicationManager";
 import SearchComp from '@/components/SearchComp';
 import { useEffect, useState } from "react";
 
@@ -15,40 +15,69 @@ export default function MoviePage() {
 
     useEffect(() => {
         (async () => {
-            const movie = await getInfoMovie(imdbID);
-            console.log("Response de la infoPeli: ", movie);
-            const session = await getSession(imdbID);
-            console.log("Response de la sesión: ", session)
-            const info = {
-                "title": movie.Title,
-                "year": movie.Year,
-                "rated": movie.Rated,
-                "released": movie.Released,
-                "runtime": movie.Runtime,
-                "genre": movie.Genre,
-                "director": movie.Director,
-                "actors": movie.Actors,
-                "plot": movie.Plot,
-                "language": movie.Language,
-                "poster": movie.Poster,
-                "showtime": session.data.time,
-                "date": session.data.date,
-                "seats": JSON.parse(session.data.seats)
-            };
-            setSesion(info);
+            await cargarData();
         })();
     }, []);
 
-    useEffect(() => {
-        console.log(sesion);
-    }, [sesion]);
-
-    useEffect(() => {
-        console.log("Asientos seleccionados: ", clickedSeats)
-    }, [clickedSeats])
+    async function cargarData() {
+        const movie = await getInfoMovie(imdbID);
+        console.log("Response de la infoPeli: ", movie);
+        const session = await getSession(imdbID);
+        console.log("Response de la sesión: ", session)
+        const info = {
+            "imdbID": movie.imdbID,
+            "title": movie.Title,
+            "year": movie.Year,
+            "rated": movie.Rated,
+            "released": movie.Released,
+            "runtime": movie.Runtime,
+            "genre": movie.Genre,
+            "director": movie.Director,
+            "actors": movie.Actors,
+            "plot": movie.Plot,
+            "language": movie.Language,
+            "poster": movie.Poster,
+            "showtime": session.data.time,
+            "date": session.data.date,
+            "seats": JSON.parse(session.data.seats)
+        };
+        setSesion(info);
+        setClickedSeats([]);
+        setSelectedDate('');
+        setSelectedTime('');
+    }
 
     function seatSelected(id) {
         return clickedSeats.some((seat) => seat.id === id);
+    }
+
+    function calculateTotal() {
+        return clickedSeats.length * 6;
+    }
+
+    async function comprarEntrada(imdbID) {
+        const session = await getSession(imdbID);
+        const seats = JSON.parse(session.data.seats);
+        let isOk = true;
+        clickedSeats.map((asiento) => {
+            const trobat = seats.find(seat => seat.id === asiento.id);
+            if (trobat && trobat.available) {
+                trobat.available = false;
+                seats[trobat.id - 1] = trobat;
+                console.log(seats);
+            } else {
+                isOk = false;
+            }
+        });
+        if (isOk) {
+            const response = await comprarTicket(imdbID, seats);
+            console.log(response);
+            await cargarData();
+        } else {
+            if (confirm("Has seleccionado un asiento ya ocupado, recarga la página")) {
+                window.location.replace('');
+            };
+        }
     }
 
     return <>
@@ -58,8 +87,8 @@ export default function MoviePage() {
                 {
                     chooseSeats &&
                     <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center" onClick={() => setChooseSeats(false)}>
-                        <div className="w-[80rem] h-[40rem] bg-white rounded-lg p-8 text-black" onClick={(e) => e.stopPropagation()}>
-                            <p>Seleccionar asientos</p>
+                        <div className="w-[80rem] bg-white rounded-lg p-8 text-black" onClick={(e) => e.stopPropagation()}>
+                            <p className="font-bold text-center mb-5 text-xl">Seleccionar asientos <span className="font-light text-base">(max 10)</span></p>
                             <div className="grid grid-cols-10 gap-2">
                                 {sesion.seats?.map((seat, index) => (
                                     <div className="flex justify-center" key={index}>
@@ -82,6 +111,15 @@ export default function MoviePage() {
                                         </svg>
                                     </div>
                                 ))}
+                            </div>
+                            <div className="w-full mt-8">
+                                <svg width="100%" height="100px" viewBox="0 0 1005 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M875.564 64H129.436L0 0H1005L875.564 64Z" fill="#D9D9D9" />
+                                </svg>
+                            </div>
+
+                            <div className="w-full flex justify-center px-5 mt-5">
+                                <button className="w-xl bg-red-600 py-3 rounded font-semibold hover:bg-red-700 transition flex items-center justify-center gap-2 text-white cursor-pointer" onClick={() => setChooseSeats(false)}>Guardar selección</button>
                             </div>
                         </div>
                     </div>
@@ -137,7 +175,7 @@ export default function MoviePage() {
                         </div>
 
                         <div className="mb-6">
-                            <label className="block text-sm font-medium mb-2">Select Time</label>
+                            <label className="block text-sm font-medium mb-2">Selecciona horario</label>
                             <div className="grid grid-cols-2 gap-2">
                                 <button
                                     key={sesion.showtime}
@@ -153,47 +191,34 @@ export default function MoviePage() {
                         </div>
                         <button className="w-full bg-gray-800 hover:bg-gray-700 py-2 rounded font-semibold transition flex items-center justify-center gap-2 cursor-pointer" onClick={() => setChooseSeats(true)}>Elegir asientos</button>
 
-                        {/* <div className="mb-6">
-                        <label className="block text-sm font-medium mb-2">Number of Seats</label>
-                        <div className="flex items-center gap-4 bg-gray-800 p-2 rounded">
-                            <button
-                                onClick={() => setSelectedSeats(Math.max(1, selectedSeats - 1))}
-                                className="p-2 hover:bg-gray-700 rounded"
-                            >
-                                -
-                            </button>
-                            <span className="flex-1 text-center">{selectedSeats}</span>
-                            <button
-                                onClick={() => setSelectedSeats(Math.min(10, selectedSeats + 1))}
-                                className="p-2 hover:bg-gray-700 rounded"
-                            >
-                                +
-                            </button>
-                        </div>
-                    </div> */}
-
-                        {/* <div className="border-t border-gray-800 pt-6 mb-6">
-                            <div className="flex justify-between mb-2">
-                                <span>Tickets ({selectedSeats} × ${movie.price})</span>
-                                <span>${calculateTotal()}</span>
-                            </div>
+                        <div className="border-t border-gray-800 pt-6 mb-6">
+                            {clickedSeats ? (
+                                <div className="flex justify-between mb-2">
+                                    <span>Tickets ({clickedSeats.length} × <span className="font-bold">6€</span>)</span>
+                                    <span>${calculateTotal()}</span>
+                                </div>
+                            ) : (null)}
                             <div className="flex justify-between font-bold">
                                 <span>Total</span>
                                 <span>${calculateTotal()}</span>
                             </div>
-                        </div> */}
+                        </div>
 
-                        {/* Book Button */}
-                        {/* <button
-                        className="w-full bg-red-600 py-3 rounded font-semibold hover:bg-red-700 transition flex items-center justify-center gap-2"
-                        onClick={() => alert('Booking system would be integrated here')}
-                    >
-                        Book Tickets
-                    </button>
+                        <button
+                            className={`w-full py-3 rounded font-semibold transition flex items-center justify-center gap-2 ${clickedSeats.length > 0 && selectedDate !== '' && selectedTime !== '' > 0 ? ("bg-red-600 hover:bg-red-700 cursor-pointer") : ("bg-gray-400 hover:bg-gray-500 cursor-not-allowed")}`}
+                            onClick={() => {
+                                if (clickedSeats.length > 0 && selectedDate !== '' && selectedTime !== '') {
+                                    comprarEntrada(sesion.imdbID);
+                                }
+                            }
+                            }
+                        >
+                            Reservar
+                        </button>
 
-                    <p className="text-xs text-gray-400 text-center mt-4">
-                        By booking, you agree to our terms and conditions
-                    </p> */}
+                        <p className="text-xs text-gray-400 text-center mt-4">
+                            Si reservas, aceptas nuestros términos y condiciones
+                        </p>
                     </div>
                 </div>
             </div>
