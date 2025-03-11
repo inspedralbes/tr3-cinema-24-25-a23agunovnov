@@ -18,8 +18,8 @@ export default function SearchComp({ onClick }) {
     }
 
     useEffect(() => {
-        setToken(localStorage.getItem('token'));
-    }, [localStorage.getItem('token')]);
+        setToken(typeof window !== 'undefined' ? localStorage.getItem('token') : '');
+    }, [typeof window !== 'undefined' ? localStorage.getItem('token') : '']);
 
     return <>
         <div className="bg-white shadow-sm sticky top-0 z-50">

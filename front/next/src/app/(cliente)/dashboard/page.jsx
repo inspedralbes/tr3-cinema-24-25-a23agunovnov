@@ -10,18 +10,9 @@ import { useRouter } from 'next/navigation'
 export default function Page() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
   const [sesions, setSesions] = useState([]);
   const [loginAuth, setLoginAuth] = useState(false);
   const router = useRouter();
-
-  async function buscarMovie() {
-    router.push(`/search?title=${searchTerm}`)
-  }
-
-  function handleKeyDown(event) {
-    if (event.key === 'Enter') buscarMovie();
-  }
 
   useEffect(() => {
     (async () => {
