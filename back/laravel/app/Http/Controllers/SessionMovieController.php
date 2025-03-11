@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\SessionMovie;
-use DateTime;
-use GuzzleHttp\Promise\Create;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
-class SessionMovieController extends Controller
+class SessionMovieController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array{
+        return [
+            new Middleware('auth:sanctum', except: ['index', 'show']),
+        ];
+    }
+    
     /**
      * Display a listing of the resource.
      */
@@ -79,16 +84,16 @@ class SessionMovieController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(String $imdbID)
+    public function show(string $imdbID)
     {
         $session = SessionMovie::where('imdb', $imdbID)->get()->first();
-        return response()->json(['success' => true, 'data' => $session ], 200);
+        return response()->json(['success' => true, 'data' => $session], 200);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Session $session)
+    public function edit(SessionMovie $session)
     {
         //
     }
@@ -96,15 +101,15 @@ class SessionMovieController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, String $imdbID)
+    public function update(Request $request, string $imdbID)
     {
         try {
             $session = SessionMovie::where('imdb', $imdbID)->get()->first();
             $session->seats = $request->seats;
             $session->save();
 
-            return response()->json(['success' => true,'message' => $session], 200);
-            
+            return response()->json(['success' => true, 'message' => $session], 200);
+
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => 'We have a problem try-catch: ' . $e->getMessage()], 500);
         }
@@ -113,7 +118,7 @@ class SessionMovieController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Session $session)
+    public function destroy(SessionMovie $session)
     {
         //
     }

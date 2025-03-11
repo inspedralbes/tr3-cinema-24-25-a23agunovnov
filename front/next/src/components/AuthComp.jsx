@@ -1,12 +1,47 @@
 'use cliente'
 
 import { useState } from "react";
+import { loginCliente, registerCliente } from "@/app/plugins/communicationManager";
 
-export default function AuthComp() {
+export default function AuthComp({ onClose }) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLogin, setIsLogin] = useState(true);
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        if (isLogin) {
+            const datos = {
+                "email": email,
+                "password": password
+            }
+            const response = await loginCliente(datos);
+            if (response && response.success) {
+                console.log("Inicio de sesión exitoso: ", response)
+                localStorage.setItem('token', response.token);
+                localStorage.setItem('userID', response.user.id);
+                localStorage.setItem('name', response.user.name);
+                localStorage.setItem('email', response.user.email);
+                onClose();
+            } else {
+                console.log("Ocurrió un problema al iniciar sesión: ", response)
+            }
+        } else {
+            const datos = {
+                "name": name,
+                "email": email,
+                "password": password
+            }
+            const response = await registerCliente(datos);
+            if (response && response.success) {
+                console.log("Registro exitoso: ", response)
+                setIsLogin(true);
+            } else {
+                console.log("Ocurrió un problema al registrarse: ", response)
+            }
+        }
+    }
 
     return (
         <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
@@ -17,17 +52,16 @@ export default function AuthComp() {
                 }}
             >
                 <button
-                    // onClick={onClose}
-                    className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-                >
+                    onClick={onClose}
+                    className="absolute top-4 right-4 text-white hover:text-white transition-colors cursor-pointer font-bold"
+                >x
                 </button>
 
                 <h2 className="text-3xl font-bold mb-8">
                     {isLogin ? 'Iniciar sesión' : 'Registrarse'}
                 </h2>
 
-                {/* <form onSubmit={handleSubmit} className="space-y-6"> */}
-                <form className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
                     {!isLogin && (
                         <div className="relative">
                             <input

@@ -1,6 +1,8 @@
 const Host = "http://localhost:8000/api";
 const omdbAPI = "http://www.omdbapi.com/?apikey=ea676a76";
 
+const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+
 // Crear sesión de película
 export async function sessionCreate(sesionData) {
     try {
@@ -15,7 +17,8 @@ export async function sessionCreate(sesionData) {
             const response = await fetch(`${Host}/session`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': token ? `Bearer ${token}` : ''
                 },
                 body: JSON.stringify({
                     "imdb": sesionData.imdb,
@@ -77,12 +80,14 @@ export async function getSession(imdb) {
     }
 }
 
+// AGREGAR QUE AL COMPRAR, SE CREE UN TICKET AL USUARIO
 export async function comprarTicket(imdbID, seats) {
     try {
         const response = await fetch(`${Host}/session/${imdbID}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': token ? `Bearer ${token}` : ''
             },
             body: JSON.stringify({
                 "seats": seats
@@ -93,5 +98,47 @@ export async function comprarTicket(imdbID, seats) {
     } catch (error) {
         console.error("Error: ", error);
         return null;
+    }
+}
+
+export async function loginCliente(datos) {
+    try {
+        const response = await fetch(`${Host}/auth/login`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        })
+        const data = await response.json();
+        if(data.success){
+            return data;
+        }else{
+            console.log("ERROR AL INICIAR SESIÓN");
+        }
+
+    } catch (error) {
+        console.error("Error: ", error);
+    }
+}
+
+export async function registerCliente(datos) {
+    try {
+        const response = await fetch(`${Host}/auth/register`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        })
+        const data = await response.json();
+        if(data.success){
+            return data;
+        }else{
+            console.log("ERROR AL REGISTRARSE");
+        }
+
+    } catch (error) {
+        console.error("Error: ", error);
     }
 }

@@ -14,13 +14,14 @@ export default function MoviePage() {
     const [chooseSeats, setChooseSeats] = useState(false);
     const [clickedSeats, setClickedSeats] = useState([]);
     const [loginAuth, setLoginAuth] = useState(false);
-    const [isLogged, setIsLogged] = useState(false);
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
         (async () => {
             await cargarData();
         })();
     }, []);
+    
 
     async function cargarData() {
         const movie = await getInfoMovie(imdbID);
@@ -72,7 +73,7 @@ export default function MoviePage() {
             }
         });
         if (isOk) {
-            if (isLogged) {
+            if (token) {
                 const response = await comprarTicket(imdbID, seats);
                 console.log(response);
                 await cargarData();
@@ -87,8 +88,8 @@ export default function MoviePage() {
     }
 
     return <>
-        { loginAuth && <AuthComp /> }
-        <SearchComp />
+        {loginAuth && <AuthComp onClose={() => setLoginAuth(false)} />}
+        <SearchComp onClick={() => setLoginAuth(true)} />
         <div className="w-full h-screen bg-[#1a1a1a] flex justify-center text-white">
             <div className="h-full w-full max-w-7xl">
                 {
