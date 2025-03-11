@@ -36,6 +36,7 @@ jobs:
           npm run build
           
           mkdir -p ${{ github.workspace }}/web
+          mkdir -p ${{ github.workspace }}/web/public
           
           cd ../
           cp -r ./next/.next/* ${{ github.workspace }}/web/
