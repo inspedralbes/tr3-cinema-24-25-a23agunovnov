@@ -17,9 +17,14 @@ jobs:
           echo "PROD_HOST: ${{ secrets.PROD_HOST }}"
           echo "PROD_KEY: ${{ secrets.PROD_KEY }}"
 
-      - name: Verificar conexión SSH
+      - name: Preparar clau SSH amb permisos correctes
         run: |
           echo "${{ secrets.PROD_KEY }}" > ~/prod_key.pem
+          chmod 600 ~/prod_key.pem
+          ls -la ~/prod_key.pem
+      
+      - name: Verificar conexión SSH
+        run: |
           ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "echo 'Conexión SSH exitosa'"
       
       - name: Preparar archivos locales
