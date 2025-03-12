@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
@@ -19,11 +21,32 @@ class TicketController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'ID_session' => 'required|integer|exists:session_movies,id',
-            'sala' => 'string|nullable',
-            'seats' => 
-        ]);
+        try {
+            $user = Auth::user();
+
+            $validated = $request->validate([
+                'ID_session' => 'required|integer|exists:session_movies,id',
+                'sala' => 'string|nullable',
+                'seats' => 'required|json',
+                'total' => 'required|numeric'
+            ]);
+
+            $ticket = Ticket::create([
+                'ID_user' => $user->id,
+                'ID_session' => $validated['ID_session'],
+                'sala' => $validated['sala'],
+                'seats' => $validated['seats'],
+                'total' => $validated['total']
+            ]);
+
+            if (!$ticket) {
+                return response()->json(['success' => false, 'message' => 'We have a problem'], 500);
+            }
+
+            return response()->json(['success' => true, 'data' => $ticket], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'We have a problem try-catch: ' . $e->getMessage()], 500);
+        }
     }
 
     public function show(Ticket $ticket)
