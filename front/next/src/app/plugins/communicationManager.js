@@ -81,7 +81,7 @@ export async function getSession(imdb) {
 }
 
 // AGREGAR QUE AL COMPRAR, SE CREE UN TICKET AL USUARIO
-export async function comprarTicket(imdbID, seats) {
+export async function comprarTicket(imdbID, seats, ticket) {
     try {
         const response = await fetch(`${Host}/session/${imdbID}`, {
             method: 'PUT',
