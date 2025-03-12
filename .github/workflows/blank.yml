@@ -56,10 +56,10 @@ jobs:
         run: |
           scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ github.workspace }}/web/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/
 
-      - name: Install dependencies and start application
+      - name: Start application
         run: |
           ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
-            cd /home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/ && npm install && npm start
+            cd /home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/ && npm start
           "
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
