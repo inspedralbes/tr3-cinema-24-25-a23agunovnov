@@ -74,13 +74,6 @@ jobs:
             cp -r ./next/.next/standalone/.next ${{ github.workspace }}/deploy-package/ || echo "Error al copiar .next"
             cp ./next/.next/standalone/server.js ${{ github.workspace }}/deploy-package/ || echo "Error al copiar server.js"
             cp ./next/.next/standalone/package.json ${{ github.workspace }}/deploy-package/ || echo "Error al copiar package.json"
-          else
-            echo "¡ADVERTENCIA! El directorio standalone no existe."
-            # Usar la estructura regular de Next.js si standalone no existe
-            cp -r ./next/.next ${{ github.workspace }}/deploy-package/ || echo "Error al copiar .next"
-            cp ./next/package.json ${{ github.workspace }}/deploy-package/ || echo "Error al copiar package.json"
-            # Crear un simple server.js si no existe
-            echo "console.log('Iniciando servidor Next.js...'); require('next').default({ dev: false, dir: __dirname }).prepare().then(() => { const app = require('next').default({ dev: false, dir: __dirname }); const server = require('http').createServer(app.getRequestHandler()); server.listen(3000, (err) => { if (err) throw err; console.log('> Ready on http://localhost:3000'); }); }).catch((ex) => { console.error(ex.stack); process.exit(1); });" > ${{ github.workspace }}/deploy-package/server.js
           fi
           
           # Copiar archivos estáticos si existen
