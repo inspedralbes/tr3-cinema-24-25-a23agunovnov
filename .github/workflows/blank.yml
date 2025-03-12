@@ -47,6 +47,9 @@ jobs:
           echo "Action desplegant a produccio" > ${{ github.workspace }}/web/last_deploy.txt
           date >> ${{ github.workspace }}/web/last_deploy.txt
 
+          cd ${{ github.workspace }}/web/
+          npm install
+
           ls -la ${{ github.workspace }}/web/
 
       - name: Copiar archivos al servidor remoto
