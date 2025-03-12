@@ -72,9 +72,23 @@ export default function MoviePage() {
                 isOk = false;
             }
         });
+
         if (isOk) {
             if (token) {
-                const response = await comprarTicket(imdbID, seats);
+                const newSeats = clickedSeats.map((seat) => {
+                    return {
+                        "id": seat.id,
+                        "row": seat.row
+                    }
+                })
+                const ticket = {
+                    'ID_session': session.data.id,
+                    'sala': "10A",
+                    'seats': JSON.stringify(newSeats),
+                    'total': calculateTotal()
+                }
+                console.log(ticket);
+                const response = await comprarTicket(imdbID, seats, ticket);
                 console.log(response);
                 await cargarData();
             } else {

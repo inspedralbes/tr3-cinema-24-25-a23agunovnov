@@ -18,8 +18,11 @@ export default function SearchComp({ onClick }) {
     }
 
     useEffect(() => {
-        setToken(localStorage.getItem('token'));
-    }, [localStorage.getItem('token')]);
+        if (typeof window !== "undefined") {
+            const token = localStorage.getItem('token');
+            setToken(token);
+        }
+    }, []);
 
     return <>
         <div className="bg-white shadow-sm sticky top-0 z-50">
@@ -61,7 +64,7 @@ export default function SearchComp({ onClick }) {
                                     </p>
                                 </div>
                                 <ul className="py-1" role="none">
-                                    <li onClick={() => {router.push('/tickets'); }} className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                    <li onClick={() => { router.push('/tickets'); }} className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                         role="menuitem">
                                         Mis tickets
                                     </li>

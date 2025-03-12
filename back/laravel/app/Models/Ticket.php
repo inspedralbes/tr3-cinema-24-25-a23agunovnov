@@ -13,6 +13,6 @@ class Ticket extends Model
 
     public function sessions(): BelongsTo
     {
-        return $this->belongsTo(Ticket::class, 'ID_session', 'id');
+        return $this->belongsTo(SessionMovie::class, 'ID_session', 'id');
     }
 }

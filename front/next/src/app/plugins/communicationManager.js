@@ -83,7 +83,7 @@ export async function getSession(imdb) {
 // AGREGAR QUE AL COMPRAR, SE CREE UN TICKET AL USUARIO
 export async function comprarTicket(imdbID, seats, ticket) {
     try {
-        const response = await fetch(`${Host}/session/${imdbID}`, {
+        const responseSeats = await fetch(`${Host}/session/${imdbID}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -93,11 +93,37 @@ export async function comprarTicket(imdbID, seats, ticket) {
                 "seats": seats
             })
         });
-        const data = response.json();
+        const newSeats = responseSeats.json();
+
+        const responseTicket = await fetch(`${Host}/ticket`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token ? `Bearer ${token}` : ''
+            },
+            body: JSON.stringify(ticket)
+        });
+        const newTicket = responseTicket.json();
+        const data = { newSeats, newTicket };
         return data;
     } catch (error) {
         console.error("Error: ", error);
         return null;
+    }
+}
+
+export async function showTickets() {
+    try {
+        const response = await fetch(`${Host}/ticket`, {
+            headers: {
+                'Authorization': token ? `Bearer ${token}` : ''
+            }
+        });
+        const data = await response.json();
+
+        return data;
+    } catch (error) {
+        console.error('Error: ', error);
     }
 }
 
@@ -111,9 +137,9 @@ export async function loginCliente(datos) {
             body: JSON.stringify(datos)
         })
         const data = await response.json();
-        if(data.success){
+        if (data.success) {
             return data;
-        }else{
+        } else {
             console.log("ERROR AL INICIAR SESIÓN");
         }
 
@@ -132,9 +158,9 @@ export async function registerCliente(datos) {
             body: JSON.stringify(datos)
         })
         const data = await response.json();
-        if(data.success){
+        if (data.success) {
             return data;
-        }else{
+        } else {
             console.log("ERROR AL REGISTRARSE");
         }
 
