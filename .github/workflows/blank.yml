@@ -35,31 +35,59 @@ jobs:
           npm install
           npm run build
 
-          mkdir -p ${{ github.workspace }}/web
-          mkdir -p ${{ github.workspace }}/web/public
+          mkdir -p ${{ github.workspace }}/deploy-package
 
           cd ../
-          cp -r ./next/.next/standalone/.next/ ${{ github.workspace }}/web/
-          cp -r ./next/.next/standalone/package.json ${{ github.workspace }}/web/
-          cp -r ./next/.next/standalone/server.js ${{ github.workspace }}/web/
-          cp -r ./next/.next/static ${{ github.workspace }}/web/
+          cp -r ./next/.next/standalone/.next ${{ github.workspace }}/deploy-package/
+          cp -r ./next/.next/standalone/server.js ${{ github.workspace }}/deploy-package/
+          cp -r ./next/.next/standalone/package.json ${{ github.workspace }}/deploy-package/
+          cp -r ./next/.next/static ${{ github.workspace }}/deploy-package/
 
-          echo "Action desplegant a produccio" > ${{ github.workspace }}/web/last_deploy.txt
-          date >> ${{ github.workspace }}/web/last_deploy.txt
+          echo "Action desplegant a produccio" > ${{ github.workspace }}/deploy-package/last_deploy.txt
+          date >> ${{ github.workspace }}/deploy-package/last_deploy.txt
 
-          cd ${{ github.workspace }}/web/
-          npm install
+          cd ${{ github.workspace }}
+          tar -czf deploy-package.tar.gz -C deploy-package
 
-          ls -la ${{ github.workspace }}/web/
-
-      - name: Copiar archivos al servidor remoto
-        run: |
-          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ github.workspace }}/web/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/
-
-      - name: Start application
+      - name: Limpiar directorio remoto
         run: |
           ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
-            cd /home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/ && npm start
+            rm -rf /home/${{ secrets.PROD_USER }}/web/cinetix.daw.inspedralbes.cat/public_html/* &&
+            echo 'Directorio remoto limpiado'
           "
+
+      # - name: Copiar archivos al servidor remoto
+      #   run: |
+      #     scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ github.workspace }}/web/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/
+
+      - name: Transferir y descomprimir archivos
+        run: |
+          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ github.workspace }}/deploy-package.tar.gz ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/${{ secrets.PROD_USER }}/web/cinetix.daw.inspedralbes.cat/public_html/
+          
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
+            cd /home/${{ secrets.PROD_USER }}/web/cinetix.daw.inspedralbes.cat/public_html/ &&
+            tar -xzf deploy-package.tar.gz &&
+            rm deploy-package.tar.gz &&
+            echo 'Archivos descomprimidos correctamente'
+          "
+
+      - name: Instalar dependencias y iniciar aplicación
+        run: |
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
+            cd /home/${{ secrets.PROD_USER }}/web/cinetix.daw.inspedralbes.cat/public_html/ &&
+            npm install --production &&
+            if pgrep -f 'node server.js'; then
+              echo 'Deteniendo proceso anterior...' &&
+              pkill -f 'node server.js'
+            fi &&
+            nohup node server.js > app.log 2>&1 &
+            echo 'Aplicación iniciada en segundo plano'
+          "
+
+      # - name: Start application
+      #   run: |
+      #     ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
+      #       cd /home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/ && npm start
+      #     "
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
