@@ -27,27 +27,90 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "echo 'Conexión SSH exitosa'"
 
+      # - name: Preparar archivos locales
+      #   run: |
+      #     cd ${{ github.workspace }}
+
+      #     cd front/next/
+      #     npm install
+      #     npm run build
+
+      #     mkdir -p ${{ github.workspace }}/deploy-package
+
+      #     cd ../
+      #     cp -r ./next/.next/standalone/.next ${{ github.workspace }}/deploy-package/
+      #     cp -r ./next/.next/standalone/server.js ${{ github.workspace }}/deploy-package/
+      #     cp -r ./next/.next/standalone/package.json ${{ github.workspace }}/deploy-package/
+      #     cp -r ./next/.next/static ${{ github.workspace }}/deploy-package/
+
+      #     echo "Action desplegant a produccio" > ${{ github.workspace }}/deploy-package/last_deploy.txt
+      #     date >> ${{ github.workspace }}/deploy-package/last_deploy.txt
+
+      #     cd ${{ github.workspace }}
+      #     tar -czf deploy-package.tar.gz -C deploy-package
+
       - name: Preparar archivos locales
         run: |
           cd ${{ github.workspace }}
-
+          
+          # Navegar al directorio del proyecto front-end
           cd front/next/
+          
+          # Instalar dependencias y construir
           npm install
           npm run build
-
+          
+          # Crear directorio para los archivos a transferir
           mkdir -p ${{ github.workspace }}/deploy-package
-
-          cd ../
-          cp -r ./next/.next/standalone/.next ${{ github.workspace }}/deploy-package/
-          cp -r ./next/.next/standalone/server.js ${{ github.workspace }}/deploy-package/
-          cp -r ./next/.next/standalone/package.json ${{ github.workspace }}/deploy-package/
-          cp -r ./next/.next/static ${{ github.workspace }}/deploy-package/
-
+          
+          # Verificar que los directorios existen antes de copiar
+          echo "Verificando estructura de directorios después del build..."
+          ls -la ./next/.next/
+          
+          # Copiar archivos necesarios para la aplicación
+          # Asegúrate de que estas rutas existen
+          if [ -d "./next/.next/standalone" ]; then
+            echo "Copiando archivos de standalone..."
+            cp -r ./next/.next/standalone/.next ${{ github.workspace }}/deploy-package/ || echo "Error al copiar .next"
+            cp ./next/.next/standalone/server.js ${{ github.workspace }}/deploy-package/ || echo "Error al copiar server.js"
+            cp ./next/.next/standalone/package.json ${{ github.workspace }}/deploy-package/ || echo "Error al copiar package.json"
+          else
+            echo "¡ADVERTENCIA! El directorio standalone no existe."
+            # Usar la estructura regular de Next.js si standalone no existe
+            cp -r ./next/.next ${{ github.workspace }}/deploy-package/ || echo "Error al copiar .next"
+            cp ./next/package.json ${{ github.workspace }}/deploy-package/ || echo "Error al copiar package.json"
+            # Crear un simple server.js si no existe
+            echo "console.log('Iniciando servidor Next.js...'); require('next').default({ dev: false, dir: __dirname }).prepare().then(() => { const app = require('next').default({ dev: false, dir: __dirname }); const server = require('http').createServer(app.getRequestHandler()); server.listen(3000, (err) => { if (err) throw err; console.log('> Ready on http://localhost:3000'); }); }).catch((ex) => { console.error(ex.stack); process.exit(1); });" > ${{ github.workspace }}/deploy-package/server.js
+          fi
+          
+          # Copiar archivos estáticos si existen
+          if [ -d "./next/.next/static" ]; then
+            echo "Copiando archivos estáticos..."
+            cp -r ./next/.next/static ${{ github.workspace }}/deploy-package/ || echo "Error al copiar static"
+          else
+            echo "¡ADVERTENCIA! El directorio static no existe."
+          fi
+          
+          # Crear archivo de registro de despliegue
           echo "Action desplegant a produccio" > ${{ github.workspace }}/deploy-package/last_deploy.txt
           date >> ${{ github.workspace }}/deploy-package/last_deploy.txt
-
+          
+          # Verificar contenido del directorio antes de comprimir
+          echo "Contenido del directorio deploy-package:"
+          ls -la ${{ github.workspace }}/deploy-package/
+          
+          # Asegurarse de que el directorio no está vacío antes de comprimir
+          if [ -z "$(ls -A ${{ github.workspace }}/deploy-package/)" ]; then
+            echo "¡ERROR! El directorio deploy-package está vacío. No se puede crear un archivo tar vacío."
+            exit 1
+          fi
+          
+          # Comprimir para transferir más rápido
           cd ${{ github.workspace }}
-          tar -czf deploy-package.tar.gz -C deploy-package
+          tar -czf deploy-package.tar.gz -C deploy-package .
+          
+          # Verificar que el archivo tar se creó correctamente
+          ls -la deploy-package.tar.gz
 
       - name: Limpiar directorio remoto
         run: |
