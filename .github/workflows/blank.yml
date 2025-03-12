@@ -27,83 +27,29 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "echo 'Conexión SSH exitosa'"
 
-      # - name: Preparar archivos locales
-      #   run: |
-      #     cd ${{ github.workspace }}
-
-      #     cd front/next/
-      #     npm install
-      #     npm run build
-
-      #     mkdir -p ${{ github.workspace }}/deploy-package
-
-      #     cd ../
-      #     cp -r ./next/.next/standalone/.next ${{ github.workspace }}/deploy-package/
-      #     cp -r ./next/.next/standalone/server.js ${{ github.workspace }}/deploy-package/
-      #     cp -r ./next/.next/standalone/package.json ${{ github.workspace }}/deploy-package/
-      #     cp -r ./next/.next/static ${{ github.workspace }}/deploy-package/
-
-      #     echo "Action desplegant a produccio" > ${{ github.workspace }}/deploy-package/last_deploy.txt
-      #     date >> ${{ github.workspace }}/deploy-package/last_deploy.txt
-
-      #     cd ${{ github.workspace }}
-      #     tar -czf deploy-package.tar.gz -C deploy-package
-
       - name: Preparar archivos locales
         run: |
           cd ${{ github.workspace }}
-          
-          # Navegar al directorio del proyecto front-end
-          cd front/
-          
-          # Instalar dependencias y construir
+
+          cd front/next/
           npm install
           npm run build
-          
-          # Crear directorio para los archivos a transferir
-          mkdir -p ${{ github.workspace }}/deploy-package
-          
-          # Verificar que los directorios existen antes de copiar
-          echo "Verificando estructura de directorios después del build..."
-          ls -la ./next/.next/
-          
-          # Copiar archivos necesarios para la aplicación
-          # Asegúrate de que estas rutas existen
-          if [ -d "./next/.next/standalone" ]; then
-            echo "Copiando archivos de standalone..."
-            cp -r ./next/.next/standalone/.next ${{ github.workspace }}/deploy-package/ || echo "Error al copiar .next"
-            cp ./next/.next/standalone/server.js ${{ github.workspace }}/deploy-package/ || echo "Error al copiar server.js"
-            cp ./next/.next/standalone/package.json ${{ github.workspace }}/deploy-package/ || echo "Error al copiar package.json"
-          fi
-          
-          # Copiar archivos estáticos si existen
-          if [ -d "./next/.next/static" ]; then
-            echo "Copiando archivos estáticos..."
-            cp -r ./next/.next/static ${{ github.workspace }}/deploy-package/ || echo "Error al copiar static"
-          else
-            echo "¡ADVERTENCIA! El directorio static no existe."
-          fi
-          
-          # Crear archivo de registro de despliegue
-          echo "Action desplegant a produccio" > ${{ github.workspace }}/deploy-package/last_deploy.txt
-          date >> ${{ github.workspace }}/deploy-package/last_deploy.txt
-          
-          # Verificar contenido del directorio antes de comprimir
-          echo "Contenido del directorio deploy-package:"
-          ls -la ${{ github.workspace }}/deploy-package/
-          
-          # Asegurarse de que el directorio no está vacío antes de comprimir
-          if [ -z "$(ls -A ${{ github.workspace }}/deploy-package/)" ]; then
-            echo "¡ERROR! El directorio deploy-package está vacío. No se puede crear un archivo tar vacío."
-            exit 1
-          fi
-          
-          # Comprimir para transferir más rápido
-          cd ${{ github.workspace }}
-          tar -czf deploy-package.tar.gz -C deploy-package .
-          
-          # Verificar que el archivo tar se creó correctamente
-          ls -la deploy-package.tar.gz
+
+          mkdir -p ${{ github.workspace }}/web
+
+          cd ../
+          cp -r ./next/.next/standalone/.next/ ${{ github.workspace }}/web/
+          cp -r ./next/.next/standalone/package.json ${{ github.workspace }}/web/
+          cp -r ./next/.next/standalone/server.js ${{ github.workspace }}/web/
+          cp -r ./next/.next/static ${{ github.workspace }}/web/
+
+          echo "Action desplegant a produccio" > ${{ github.workspace }}/web/last_deploy.txt
+          date >> ${{ github.workspace }}/web/last_deploy.txt
+
+          cd ${{ github.workspace }}/web/
+          npm install
+
+          ls -la ${{ github.workspace }}/web/
 
       - name: Limpiar directorio remoto
         run: |
@@ -112,38 +58,14 @@ jobs:
             echo 'Directorio remoto limpiado'
           "
 
-      # - name: Copiar archivos al servidor remoto
-      #   run: |
-      #     scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ github.workspace }}/web/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/
-
-      - name: Transferir y descomprimir archivos
+      - name: Copiar archivos al servidor remoto
         run: |
-          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ github.workspace }}/deploy-package.tar.gz ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/${{ secrets.PROD_USER }}/web/cinetix.daw.inspedralbes.cat/public_html/
-          
-          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
-            cd /home/${{ secrets.PROD_USER }}/web/cinetix.daw.inspedralbes.cat/public_html/ &&
-            tar -xzf deploy-package.tar.gz &&
-            rm deploy-package.tar.gz &&
-            echo 'Archivos descomprimidos correctamente'
-          "
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ github.workspace }}/web/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/
 
-      - name: Instalar dependencias y iniciar aplicación
+      - name: Start application
         run: |
           ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
-            cd /home/${{ secrets.PROD_USER }}/web/cinetix.daw.inspedralbes.cat/public_html/ &&
-            npm install --production &&
-            if pgrep -f 'node server.js'; then
-              echo 'Deteniendo proceso anterior...' &&
-              pkill -f 'node server.js'
-            fi &&
-            nohup node server.js > app.log 2>&1 &
-            echo 'Aplicación iniciada en segundo plano'
+            cd /home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/ && npm start
           "
-
-      # - name: Start application
-      #   run: |
-      #     ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
-      #       cd /home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/ && npm start
-      #     "
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
