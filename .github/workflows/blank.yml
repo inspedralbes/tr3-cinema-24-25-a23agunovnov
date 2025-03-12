@@ -36,7 +36,6 @@ jobs:
           npm run build
 
           mkdir -p ${{ github.workspace }}/web
-          mkdir -p ${{ github.workspace }}/web/public
 
           cd ../
           cp -r ./next/.next/standalone/.next/ ${{ github.workspace }}/web/
@@ -58,7 +57,7 @@ jobs:
 
       - name: Copiar archivos al servidor remoto
         run: |
-          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" /home/runner/work/tr3-cinema-24-25-***/tr3-cinema-24-25-***/web/* ***@***:/home/***/web/cinetix.***/public_html/
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ github.workspace }}/web/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:${{ github.workspace }}/web/cinetix.${{ secrets.PROD_HOST }}/public_html/
 
       - name: Start application
         run: |
