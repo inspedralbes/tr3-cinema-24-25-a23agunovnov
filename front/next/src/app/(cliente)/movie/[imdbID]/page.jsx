@@ -127,7 +127,7 @@ export default function MoviePage() {
                                         }}>
                                             <path d="M0 26C0 11.6406 11.6406 0 26 0H141C155.359 0 167 11.6406 167 26V110C167 141.48 141.48 167 110 167H57C25.5198 167 0 141.48 0 110V26Z"
                                                 fill={
-                                                    seat.available ? (seatSelected(seat.id) ? "#FDE208" : "#D9D9D9") : "#98FF96"
+                                                    seat.available ? (seatSelected(seat.id) ? "#98FF96" : "#D9D9D9") : "#FF0000"
                                                 }
                                             />
                                         </svg>
