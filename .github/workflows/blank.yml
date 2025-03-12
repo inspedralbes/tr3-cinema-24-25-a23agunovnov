@@ -54,7 +54,7 @@ jobs:
           cd ${{ github.workspace }}
           
           # Navegar al directorio del proyecto front-end
-          cd front/next/
+          cd front/
           
           # Instalar dependencias y construir
           npm install
