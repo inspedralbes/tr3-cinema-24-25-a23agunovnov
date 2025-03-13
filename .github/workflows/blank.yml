@@ -35,16 +35,16 @@ jobs:
           npm install
           npm run build
 
-          mkdir -p ${{ github.workspace }}/web
+          # mkdir -p ${{ github.workspace }}/web
           # mkdir -p ${{ github.workspace }}/web/.next
 
           # cp -r ./.next/standalone/.next/* ${{ github.workspace }}/web/.next
-          cp -r ./.next/standalone/package.json ${{ github.workspace }}/web/
-          cp -r ./.next/standalone/server.js ${{ github.workspace }}/web/
-          cp -r ./.next/static ${{ github.workspace }}/web/next
+          # cp -r ./.next/standalone/package.json ${{ github.workspace }}/web/
+          # cp -r ./.next/standalone/server.js ${{ github.workspace }}/web/
+          # cp -r ./.next/static ${{ github.workspace }}/web/next
 
-          # echo "Action desplegant a produccio" > ${{ github.workspace }}/web/last_deploy.txt
-          # date >> ${{ github.workspace }}/web/last_deploy.txt
+          echo "Action desplegant a produccio" > ${{ github.workspace }}/web/last_deploy.txt
+          date >> ${{ github.workspace }}/web/last_deploy.txt
 
           ls -la ${{ github.workspace }}/web/
 
