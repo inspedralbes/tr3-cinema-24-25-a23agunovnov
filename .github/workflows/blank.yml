@@ -29,10 +29,10 @@ jobs:
 
       - name: Limpiar directorio remoto
         run: |
-          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} << 'EOF'
             rm -rf /home/${{ secrets.PROD_USER }}/web/cinetix.daw.inspedralbes.cat/public_html/* &&
             echo 'Directorio remoto limpiado'
-          "
+          EOF
 
       - name: Preparar archivos locales
         run: |
@@ -74,7 +74,7 @@ jobs:
               echo 'Deteniendo proceso anterior...' &&
               pkill -f 'node server.js'
             fi &&
-            nohup node server.js > app.log 2>&1 &
+            nohup node server.js > app.log 2>&1 & disown &
             echo 'Aplicación iniciada en segundo plano'
           EOF
 
