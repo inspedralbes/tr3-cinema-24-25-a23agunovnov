@@ -27,6 +27,13 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "echo 'Conexión SSH exitosa'"
 
+      - name: Limpiar directorio remoto
+        run: |
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
+            rm -rf /home/${{ secrets.PROD_USER }}/web/cinetix.daw.inspedralbes.cat/public_html/* &&
+            echo 'Directorio remoto limpiado'
+          "
+
       - name: Preparar archivos locales
         run: |
           cd ${{ github.workspace }}
@@ -47,13 +54,6 @@ jobs:
           date >> ${{ github.workspace }}/web/last_deploy.txt
 
           ls -la ${{ github.workspace }}/web/
-
-      - name: Limpiar directorio remoto
-        run: |
-          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
-            rm -rf /home/${{ secrets.PROD_USER }}/web/cinetix.daw.inspedralbes.cat/public_html/* &&
-            echo 'Directorio remoto limpiado'
-          "
 
       - name: Copiar archivos al servidor remoto
         run: |
