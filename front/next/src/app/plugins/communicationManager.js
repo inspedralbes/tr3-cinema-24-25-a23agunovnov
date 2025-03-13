@@ -209,3 +209,17 @@ export async function registerAdmin(datos) {
         console.error("Error: ", error);
     }
 }
+
+export async function getInfoSessions() {
+    try {
+        const response = await fetch (`${Host}/ticket/getAll`, {
+            headers: {
+                'Authorization': token ? `Bearer ${token}` : ''
+            }
+        });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error: ', error);
+    }
+}

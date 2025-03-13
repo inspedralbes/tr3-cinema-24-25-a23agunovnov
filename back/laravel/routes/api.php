@@ -24,3 +24,4 @@ Route::prefix('/auth')->group(function () {
 Route::apiResource('/session', SessionMovieController::class);
 
 Route::apiResource('/ticket', TicketController::class)->middleware('auth:sanctum');
+Route::get('/ticket/getAll', [TicketController::class, 'getAll'])->middleware('auth:sanctum');

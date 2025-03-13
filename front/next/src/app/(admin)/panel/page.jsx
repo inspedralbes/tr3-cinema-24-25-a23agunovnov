@@ -69,13 +69,6 @@ export default function Page() {
 
   return (
     <>
-      <header className="w-full h-[50px] bg-gradient-to-b from-gray-900 to-gray-800">
-        <div className="mx-5 flex justify-between h-full items-center">
-          <div className="font-bold text-white text-3xl">
-            Panel de admin
-          </div>
-        </div>
-      </header>
       <div className="w-full h-screen">
         <div className="grid md:grid-cols-4 gap-5 mx-10 mt-5">
           <div className="h-[250px] shadow-md"></div>
@@ -83,19 +76,32 @@ export default function Page() {
           <div className="h-[250px] shadow-md"></div>
           <div className="h-[250px] shadow-md"></div>
         </div>
-        <div>
-          <table className="border">
-            <thead>
-              <th>Client</th>
-              <th>Pel·licula</th>
-              <th>Horari</th>
-              <th>Data</th>
-              <th>Total</th>
+        <div className="w-full flex justify-center">
+          <table className="w-full border border-gray-300 shadow text-left md:mx-10">
+            <thead className="border-b border-gray-400">
+              <tr className="divide-x divide-gray-400">
+                <th className="py-3 px-2">Client</th>
+                <th className="py-3 px-2">Pel·licula</th>
+                <th className="py-3 px-2">Horari</th>
+                <th className="py-3 px-2">Data</th>
+                <th className="py-3 px-2">Total</th>
+              </tr>
             </thead>
-            <tbody>
-              <td>
-                <tr></tr>
-              </td>
+            <tbody className="divide-y divide-gray-200">
+              <tr className="hover:bg-gray-200 divide-x divide-gray-200">
+                <td className="py-3 px-2">test</td>
+                <td className="py-3 px-2">test</td>
+                <td className="py-3 px-2">test</td>
+                <td className="py-3 px-2">test</td>
+                <td className="py-3 px-2">test</td>
+              </tr>
+              <tr className="hover:bg-gray-200 divide-x divide-gray-200">
+                <td className="py-3 px-2">test</td>
+                <td className="py-3 px-2">test</td>
+                <td className="py-3 px-2">test</td>
+                <td className="py-3 px-2">test</td>
+                <td className="py-3 px-2">test</td>
+              </tr>
             </tbody>
           </table>
         </div>

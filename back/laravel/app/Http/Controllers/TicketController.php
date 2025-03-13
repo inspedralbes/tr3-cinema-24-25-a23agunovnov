@@ -41,9 +41,44 @@ class TicketController extends Controller
         }
     }
 
-    public function create()
+    public function getAll()
     {
-        //
+        try {
+            $user = Auth::user();
+            
+            if ($user) {
+                $tickets = Ticket::orderBy('created_at', 'desc')->get();
+
+                if (!$tickets) {
+                    return response()->json(['success' => false, 'message' => 'We have a problem'], 500);
+                }
+
+                if ($tickets->isEmpty()) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'No se encontraron tickets.',
+                        'data' => []
+                    ], 200);
+                }
+
+                // return response()->json([
+                //     'success' => true,
+                //     'data' => $tickets
+                // ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Usuario no autenticado',
+                    'data' => []
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ocurrió un error al obtener los tickets.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function store(Request $request)
