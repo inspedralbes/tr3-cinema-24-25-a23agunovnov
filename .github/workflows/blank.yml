@@ -70,7 +70,7 @@ jobs:
               echo 'Deteniendo proceso anterior...' &&
               pkill -f 'npm start'
             fi &&
-            nohup npm start > app.log 2>&1 &"
+            nohup npm start > app.log 2>&1 &
           EOF
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
