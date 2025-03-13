@@ -65,20 +65,17 @@ jobs:
       #       cd /home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/ && npm install
       #     "
     
-      # - name: Start application
-      #   run: |
-      #     # ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
-      #     #   cd /home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/ && npm start
-      #     # "
-      #     ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
-      #       cd /home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/ && 
-      #       npm install --production &&
-      #       if pgrep -f 'node server.js'; then
-      #         echo 'Deteniendo proceso anterior...' &&
-      #         pkill -f 'node server.js'
-      #       fi &&
-      #       nohup node server.js > app.log 2>&1 &
-      #       echo 'Aplicación iniciada en segundo plano'
-      #     "
+      - name: Start application
+        run: |
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
+            cd /home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/ && 
+            npm install &&
+            if pgrep -f 'node server.js'; then
+              echo 'Deteniendo proceso anterior...' &&
+              pkill -f 'node server.js'
+            fi &&
+            nohup node server.js > app.log 2>&1 &
+            echo 'Aplicación iniciada en segundo plano'
+          "
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
