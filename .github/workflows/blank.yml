@@ -43,8 +43,8 @@ jobs:
           cp -r ./.next/standalone/server.js ${{ github.workspace }}/web/
           cp -r ./.next/static ${{ github.workspace }}/web/.next
 
-          echo "Action desplegant a produccio" > ${{ github.workspace }}/web/last_deploy.txt
-          date >> ${{ github.workspace }}/web/last_deploy.txt
+          # echo "Action desplegant a produccio" > ${{ github.workspace }}/web/last_deploy.txt
+          # date >> ${{ github.workspace }}/web/last_deploy.txt
 
           ls -la ${{ github.workspace }}/web/
 
