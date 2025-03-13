@@ -41,7 +41,7 @@ jobs:
           cp -r ./.next/standalone/.next/* ${{ github.workspace }}/web/.next
           cp -r ./.next/standalone/package.json ${{ github.workspace }}/web/
           cp -r ./.next/standalone/server.js ${{ github.workspace }}/web/
-          cp -r ./.next/static ${{ github.workspace }}/web/
+          cp -r ./.next/static ${{ github.workspace }}/web/.next
 
           echo "Action desplegant a produccio" > ${{ github.workspace }}/web/last_deploy.txt
           date >> ${{ github.workspace }}/web/last_deploy.txt
