@@ -49,7 +49,9 @@ jobs:
           cp -r ./.next/standalone/package.json ${{ github.workspace }}/web/
           cp -r ./.next/standalone/server.js ${{ github.workspace }}/web/
           cp -r ./.next/static ${{ github.workspace }}/web/.next
-
+          echo "RewriteEngine On" > ${{ github.workspace }}/web/.htaccess
+          echo "RewriteRule ^(.*)$ http://cinetix.daw.inspedralbes.cat:29000/$1 [L]" >> ${{ github.workspace }}/web/.htaccess
+          
           echo "Action desplegant a produccio" > ${{ github.workspace }}/web/last_deploy.txt
           date >> ${{ github.workspace }}/web/last_deploy.txt
 
@@ -57,19 +59,18 @@ jobs:
 
       - name: Copiar archivos al servidor remoto
         run: |
-          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ github.workspace }}/web/* ${{ github.workspace }}/web/.next ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/${{ secrets.PROD_USER }}/web/cinetix.daw.inspedralbes.cat/public_html/
-
-      # - name: Start application
-      #   run: |
-      #     ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
-      #       cd /home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/ && npm install
-      #     "
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ github.workspace }}/web/* ${{ github.workspace }}/web/.next ${{ github.workspace }}/web/.htaccess ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/${{ secrets.PROD_USER }}/web/cinetix.daw.inspedralbes.cat/public_html/
     
       - name: Start application
         run: |
           ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} << 'EOF'
             cd /home/a23agunovnov/web/cinetix.daw.inspedralbes.cat/public_html/ &&
-            npm install
+            npm install &&
+            if pgrep -f 'npm start'; then
+              echo 'Deteniendo proceso anterior...' &&
+              pkill -f 'npm start'
+            fi &&
+            nohup npm start > app.log 2>&1 &"
           EOF
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
