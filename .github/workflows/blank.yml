@@ -36,9 +36,9 @@ jobs:
           npm run build
 
           mkdir -p ${{ github.workspace }}/web
-          mkdir -p ${{ github.workspace }}/web/.nexto
+          # mkdir -p ${{ github.workspace }}/web/.next
 
-          cp -r ./.next/standalone/.next/* ${{ github.workspace }}/web/.nexto
+          # cp -r ./.next/standalone/.next/* ${{ github.workspace }}/web/.next
           cp -r ./.next/standalone/package.json ${{ github.workspace }}/web/
           cp -r ./.next/standalone/server.js ${{ github.workspace }}/web/
           cp -r ./.next/static ${{ github.workspace }}/web/next
