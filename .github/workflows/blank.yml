@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} està pujant l'aplicació a PROD 🚀
 on:
   push:
     branches:
-      - provaGHActions
+      - main
 jobs:
   Pujar-a-produccio-amb-SCP:
     runs-on: ubuntu-latest
