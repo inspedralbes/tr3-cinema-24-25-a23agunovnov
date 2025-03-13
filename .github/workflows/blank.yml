@@ -71,6 +71,7 @@ jobs:
               pkill -f 'npm start'
             fi &&
             nohup npm start > app.log 2>&1 &
+            disown
           EOF
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
