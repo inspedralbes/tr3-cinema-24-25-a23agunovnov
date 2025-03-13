@@ -10,6 +10,6 @@ class Cliente extends Model
     use HasApiTokens;
     protected $table = 'clientes';
     protected $fillable = [
-        'name', 'email', 'password'
+        'name', 'phone', 'email', 'password'
     ];
 }

@@ -5,6 +5,7 @@ import { loginCliente, registerCliente } from "@/app/plugins/communicationManage
 
 export default function AuthComp({ onClose }) {
     const [name, setName] = useState('');
+    const [telefono, setTelefono] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLogin, setIsLogin] = useState(true);
@@ -30,6 +31,7 @@ export default function AuthComp({ onClose }) {
         } else {
             const datos = {
                 "name": name,
+                "phone": telefono,
                 "email": email,
                 "password": password
             }
@@ -70,6 +72,13 @@ export default function AuthComp({ onClose }) {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 className="w-full bg-gray-700 text-white px-6 py-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Teléfono"
+                                value={telefono}
+                                onChange={(e) => setTelefono(e.target.value)}
+                                className="mt-6 w-full bg-gray-700 text-white px-6 py-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
                             />
                         </div>
                     )}

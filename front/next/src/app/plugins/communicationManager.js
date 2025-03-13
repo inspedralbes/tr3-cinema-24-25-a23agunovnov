@@ -80,7 +80,6 @@ export async function getSession(imdb) {
     }
 }
 
-// AGREGAR QUE AL COMPRAR, SE CREE UN TICKET AL USUARIO
 export async function comprarTicket(imdbID, seats, ticket) {
     try {
         const responseSeats = await fetch(`${Host}/session/${imdbID}`, {
@@ -151,6 +150,48 @@ export async function loginCliente(datos) {
 export async function registerCliente(datos) {
     try {
         const response = await fetch(`${Host}/auth/register`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        })
+        const data = await response.json();
+        if (data.success) {
+            return data;
+        } else {
+            console.log("ERROR AL REGISTRARSE");
+        }
+
+    } catch (error) {
+        console.error("Error: ", error);
+    }
+}
+
+export async function loginAdmin(datos) {
+    try {
+        const response = await fetch(`${Host}/auth/login-admin`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        })
+        const data = await response.json();
+        if (data.success) {
+            return data;
+        } else {
+            console.log("ERROR AL INICIAR SESIÓN");
+        }
+
+    } catch (error) {
+        console.error('Error: ', error);
+    }
+}
+
+export async function registerAdmin(datos) {
+    try {
+        const response = await fetch(`${Host}/auth/register-admin`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'

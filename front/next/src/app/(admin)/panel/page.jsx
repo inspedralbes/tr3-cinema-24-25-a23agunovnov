@@ -76,6 +76,30 @@ export default function Page() {
           </div>
         </div>
       </header>
+      <div className="w-full h-screen">
+        <div className="grid md:grid-cols-4 gap-5 mx-10 mt-5">
+          <div className="h-[250px] shadow-md"></div>
+          <div className="h-[250px] shadow-md"></div>
+          <div className="h-[250px] shadow-md"></div>
+          <div className="h-[250px] shadow-md"></div>
+        </div>
+        <div>
+          <table className="border">
+            <thead>
+              <th>Client</th>
+              <th>Pel·licula</th>
+              <th>Horari</th>
+              <th>Data</th>
+              <th>Total</th>
+            </thead>
+            <tbody>
+              <td>
+                <tr></tr>
+              </td>
+            </tbody>
+          </table>
+        </div>
+      </div>
       <div className="w-full grid md:grid-cols-2 gap-5 mt-5">
         <div className="bg-white rounded-lg shadow-md p-3 h-[70vh] md:ml-5">
           <form action={crearSesion} className="space-y-4">
