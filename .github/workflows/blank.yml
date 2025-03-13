@@ -55,9 +55,9 @@ jobs:
             echo 'Directorio remoto limpiado'
           "
 
-      # - name: Copiar archivos al servidor remoto
-      #   run: |
-      #     scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ github.workspace }}/web/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/${{ secrets.PROD_USER }}/web/cinetix.daw.inspedralbes.cat/public_html/
+      - name: Copiar archivos al servidor remoto
+        run: |
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "/home/runner/prod_key.pem" ${{ github.workspace }}/web/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/${{ secrets.PROD_USER }}/web/cinetix.daw.inspedralbes.cat/public_html/
 
       # - name: Start application
       #   run: |
