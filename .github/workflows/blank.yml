@@ -74,7 +74,7 @@ jobs:
               echo 'Deteniendo proceso anterior...' &&
               pkill -f 'node server.js'
             fi &&
-            nohup node server.js > app.log 2>&1 & disown &
+            nohup PORT=23443 node server.js > app.log 2>&1 & disown &
             echo 'Aplicación iniciada en segundo plano'
           EOF
 
