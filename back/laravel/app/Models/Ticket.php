@@ -15,4 +15,9 @@ class Ticket extends Model
     {
         return $this->belongsTo(SessionMovie::class, 'ID_session', 'id');
     }
+
+    public function cliente(): BelongsTo
+    {
+        return $this->belongsTo(Cliente::class, 'ID_user', 'id');
+    }
 }

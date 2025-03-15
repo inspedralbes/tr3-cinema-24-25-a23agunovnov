@@ -18,7 +18,6 @@ export default function Tickets() {
         })();
     }, []);
     return <>
-        <SearchComp />
         <div className="min-h-screen bg-[#1a1a1a] text-white py-8">
             <div className="max-w-7xl mx-auto px-4">
                 <h1 className="text-3xl font-bold mb-8">Mis Tickets</h1>

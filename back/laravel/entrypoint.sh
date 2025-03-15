@@ -10,7 +10,6 @@ sleep 3
 # Generar la clave de Laravel
 php artisan key:generate
 
-# Migrar la base de datos solo si está vacía
 php artisan migrate:fresh --seed
 
 # Iniciar el servidor

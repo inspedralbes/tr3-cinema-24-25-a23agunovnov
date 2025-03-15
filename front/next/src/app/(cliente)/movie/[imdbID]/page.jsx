@@ -13,6 +13,7 @@ export default function MoviePage() {
     const [selectedTime, setSelectedTime] = useState('');
     const [chooseSeats, setChooseSeats] = useState(false);
     const [clickedSeats, setClickedSeats] = useState([]);
+    const [formattedDate, setFormattedDate] = useState('');
     const [loginAuth, setLoginAuth] = useState(false);
     const token = localStorage.getItem('token');
 
@@ -21,7 +22,16 @@ export default function MoviePage() {
             await cargarData();
         })();
     }, []);
-    
+
+    useEffect(() => {
+        setFormattedDate(
+            new Date(sesion.date).toLocaleDateString('es-ES', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+            })
+        );
+    }, [sesion.date]);
 
     async function cargarData() {
         const movie = await getInfoMovie(imdbID);
@@ -102,8 +112,6 @@ export default function MoviePage() {
     }
 
     return <>
-        {loginAuth && <AuthComp onClose={() => setLoginAuth(false)} />}
-        <SearchComp onClick={() => setLoginAuth(true)} />
         <div className="w-full h-screen bg-[#1a1a1a] flex justify-center text-white">
             <div className="h-full w-full max-w-7xl">
                 {
@@ -187,11 +195,7 @@ export default function MoviePage() {
                                         : 'bg-gray-800 hover:bg-gray-700'
                                         }`}
                                 >
-                                    {new Date(sesion.date).toLocaleDateString('es-ES', {
-                                        weekday: 'short',
-                                        month: 'short',
-                                        day: 'numeric'
-                                    })}
+                                    {formattedDate}
                                 </button>
                             </div>
                         </div>

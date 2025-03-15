@@ -47,7 +47,7 @@ class TicketController extends Controller
             $user = Auth::user();
             
             if ($user) {
-                $tickets = Ticket::orderBy('created_at', 'desc')->get();
+                $tickets = Ticket::orderBy('created_at', 'desc')->with('cliente:id,name,phone,email')->with('sessions:id,title,time,date')->get();
 
                 if (!$tickets) {
                     return response()->json(['success' => false, 'message' => 'We have a problem'], 500);
@@ -61,10 +61,10 @@ class TicketController extends Controller
                     ], 200);
                 }
 
-                // return response()->json([
-                //     'success' => true,
-                //     'data' => $tickets
-                // ], 200);
+                return response()->json([
+                    'success' => true,
+                    'data' => $tickets
+                ], 200);
             } else {
                 return response()->json([
                     'success' => false,
