@@ -6,7 +6,7 @@ export default function MovieComp(props) {
     const router = useRouter();
 
     return <>
-        <div onClick={() => router.push(`/movie/${props.movie.imdbID}`)} className="group relative rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105 cursor-pointer">
+        <div onClick={() => router.push(`/movie/${props.movie.imdbID}`)} className="group relative rounded-lg overflow-hidden shadow-lg transition hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] hover:shadow-red-600 cursor-pointer">
             <img
                 src={props.movie.Poster}
                 alt={props.movie.Title}

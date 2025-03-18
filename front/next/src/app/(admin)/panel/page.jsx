@@ -9,6 +9,7 @@ export default function Page() {
   const [sesions, setSesions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tickets, setTickets] = useState([]);
+  const [range, setRange] = useState('all');
 
   useEffect(() => {
     (async () => {
@@ -90,6 +91,14 @@ export default function Page() {
   return (
     <>
       <div className="w-full h-screen">
+        <div className="w-full flex justify-center items-center">
+          <select name="daySelector" id="daySelector" className="p-2 border border-gray-300 rounded-md">
+            <option value="today">Hoy</option>
+            <option value="2023-03-17">17 mar</option>
+            <option value="2023-03-16">domingo, 16 mar</option>
+            <option value="2023-03-15">sabado, 15 mar</option>
+          </select>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mx-10 mt-5">
           {/* Today's Sales Card */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">

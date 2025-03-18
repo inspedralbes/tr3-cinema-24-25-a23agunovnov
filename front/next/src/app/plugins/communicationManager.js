@@ -212,7 +212,7 @@ export async function registerAdmin(datos) {
 
 export async function getInfoSessions() {
     try {
-        const response = await fetch (`${Host}/getAllTickets`, {
+        const response = await fetch (`${Host}/getAllTickets/`, {
             headers: {
                 'Authorization': token ? `Bearer ${token}` : ''
             }
