@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { viewSessions, getInfoMovie } from "@/app/plugins/communicationManager";
-import MovieComp from '../../../components/MovieComp';
+import MovieComp from '@/components/MovieComp';
 
 export default function Page() {
   const [movies, setMovies] = useState([]);

@@ -1,5 +1,5 @@
 'use client'
-import { sessionCreate, getInfoMovie, viewSessions, getInfoSessions } from "@/app/plugins/communicationManager";
+import { sessionCreate, getInfoMovie, viewSessions   } from "@/app/plugins/communicationManager";
 import { useEffect, useState } from "react";
 
 export default function Page() {
@@ -8,14 +8,10 @@ export default function Page() {
   const [movieName, setMovieName] = useState('');
   const [sesions, setSesions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [tickets, setTickets] = useState([]);
-  const [range, setRange] = useState('all');
 
   useEffect(() => {
     (async () => {
-      // console.log("Entra")
       await verSesiones();
-      await verTicketsComprados();
       setLoading(false);
     })();
   }, []);
@@ -38,16 +34,6 @@ export default function Page() {
       }
     })();
   }, [imdb])
-
-  async function verTicketsComprados() {
-    try {
-      const response = await getInfoSessions();
-      console.log(response);
-      setTickets(response);
-    } catch (error) {
-      console.error("Error: ", error)
-    }
-  }
 
   async function crearSesion(formData) {
     const imdbID = formData.get("imdb");
@@ -78,14 +64,6 @@ export default function Page() {
     } catch (error) {
       console.error("Error: ", error);
     }
-  }
-
-  function totalTickets() {
-    let total = 0;
-    tickets.data.map((ticket) => {
-      total += ticket.total;
-    })
-    return total;
   }
 
   return (
