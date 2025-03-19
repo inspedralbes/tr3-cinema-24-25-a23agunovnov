@@ -74,7 +74,7 @@ export default function Page() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-500">Promedio de ventas</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{promedioVentas} €</p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">{promedioVentas.toFixed(2)} €</p>
               </div>
               <div className="bg-purple-100 p-2 rounded-lg">
                 <svg height="1.3em" width="1.3em" fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier"></g><g id="SVGRepo_tracerCarrier"></g><g id="SVGRepo_iconCarrier"><path d="M19,4H17V3a1,1,0,0,0-2,0V4H9V3A1,1,0,0,0,7,3V4H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V7A3,3,0,0,0,19,4Zm1,15a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V12H20Zm0-9H4V7A1,1,0,0,1,5,6H7V7A1,1,0,0,0,9,7V6h6V7a1,1,0,0,0,2,0V6h2a1,1,0,0,1,1,1Z"></path></g></svg>
