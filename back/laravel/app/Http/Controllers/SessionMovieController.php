@@ -21,6 +21,7 @@ class SessionMovieController extends Controller implements HasMiddleware
     public function index()
     {
         try {
+            // $sesiones = SessionMovie::where('date', '>=', today())->get();
             $sesiones = SessionMovie::all();
             return response()->json(['success' => true, 'data' => $sesiones]);
         } catch (\Exception $e) {

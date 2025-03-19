@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TicketController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SessionMovieController;
@@ -21,3 +22,10 @@ Route::prefix('/auth')->group(function () {
 });
 
 Route::apiResource('/session', SessionMovieController::class);
+
+Route::apiResource('/ticket', TicketController::class)->middleware('auth:sanctum');
+Route::get('/getAllTickets', [TicketController::class, 'getAll'])->middleware('auth:sanctum');
+
+Route::get('/test', function () {
+    return 'Hello, API!';
+});

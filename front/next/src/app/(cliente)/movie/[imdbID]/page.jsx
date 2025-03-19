@@ -13,6 +13,7 @@ export default function MoviePage() {
     const [selectedTime, setSelectedTime] = useState('');
     const [chooseSeats, setChooseSeats] = useState(false);
     const [clickedSeats, setClickedSeats] = useState([]);
+    const [formattedDate, setFormattedDate] = useState('');
     const [loginAuth, setLoginAuth] = useState(false);
     const token = localStorage.getItem('token');
 
@@ -21,7 +22,16 @@ export default function MoviePage() {
             await cargarData();
         })();
     }, []);
-    
+
+    useEffect(() => {
+        setFormattedDate(
+            new Date(sesion.date).toLocaleDateString('es-ES', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+            })
+        );
+    }, [sesion.date]);
 
     async function cargarData() {
         const movie = await getInfoMovie(imdbID);
@@ -72,9 +82,23 @@ export default function MoviePage() {
                 isOk = false;
             }
         });
+
         if (isOk) {
             if (token) {
-                const response = await comprarTicket(imdbID, seats);
+                const newSeats = clickedSeats.map((seat) => {
+                    return {
+                        "id": seat.id,
+                        "row": seat.row
+                    }
+                })
+                const ticket = {
+                    'ID_session': session.data.id,
+                    'sala': "10A",
+                    'seats': JSON.stringify(newSeats),
+                    'total': calculateTotal()
+                }
+                console.log(ticket);
+                const response = await comprarTicket(imdbID, seats, ticket);
                 console.log(response);
                 await cargarData();
             } else {
@@ -88,8 +112,6 @@ export default function MoviePage() {
     }
 
     return <>
-        {loginAuth && <AuthComp onClose={() => setLoginAuth(false)} />}
-        <SearchComp onClick={() => setLoginAuth(true)} />
         <div className="w-full h-screen bg-[#1a1a1a] flex justify-center text-white">
             <div className="h-full w-full max-w-7xl">
                 {
@@ -113,7 +135,7 @@ export default function MoviePage() {
                                         }}>
                                             <path d="M0 26C0 11.6406 11.6406 0 26 0H141C155.359 0 167 11.6406 167 26V110C167 141.48 141.48 167 110 167H57C25.5198 167 0 141.48 0 110V26Z"
                                                 fill={
-                                                    seat.available ? (seatSelected(seat.id) ? "#FDE208" : "#D9D9D9") : "#98FF96"
+                                                    seat.available ? (seatSelected(seat.id) ? "#98FF96" : "#D9D9D9") : "#FF0000"
                                                 }
                                             />
                                         </svg>
@@ -173,11 +195,7 @@ export default function MoviePage() {
                                         : 'bg-gray-800 hover:bg-gray-700'
                                         }`}
                                 >
-                                    {new Date(sesion.date).toLocaleDateString('es-ES', {
-                                        weekday: 'short',
-                                        month: 'short',
-                                        day: 'numeric'
-                                    })}
+                                    {formattedDate}
                                 </button>
                             </div>
                         </div>

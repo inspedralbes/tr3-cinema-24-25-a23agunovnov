@@ -33,6 +33,7 @@ class ClienteController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
+            'phone' => 'required|string',
             'email' => 'required|email|unique:clientes,email',
             'password' => 'required|string',
         ]);
@@ -45,6 +46,7 @@ class ClienteController extends Controller
 
         $cliente = Cliente::create([
             'name' => $request->name,
+            'phone' => $request->phone,
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);

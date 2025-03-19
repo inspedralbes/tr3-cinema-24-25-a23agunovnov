@@ -1,5 +1,5 @@
 'use client'
-import { sessionCreate, getInfoMovie, viewSessions } from "@/app/plugins/communicationManager";
+import { sessionCreate, getInfoMovie, viewSessions   } from "@/app/plugins/communicationManager";
 import { useEffect, useState } from "react";
 
 export default function Page() {
@@ -11,7 +11,6 @@ export default function Page() {
 
   useEffect(() => {
     (async () => {
-      // console.log("Entra")
       await verSesiones();
       setLoading(false);
     })();
@@ -69,14 +68,7 @@ export default function Page() {
 
   return (
     <>
-      <header className="w-full h-[50px] bg-gradient-to-b from-gray-900 to-gray-800">
-        <div className="mx-5 flex justify-between h-full items-center">
-          <div className="font-bold text-white text-3xl">
-            Panel de admin
-          </div>
-        </div>
-      </header>
-      <div className="w-full grid md:grid-cols-2 gap-5 mt-5">
+      <div className="w-full grid md:grid-cols-2 gap-5 my-5">
         <div className="bg-white rounded-lg shadow-md p-3 h-[70vh] md:ml-5">
           <form action={crearSesion} className="space-y-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -103,7 +95,7 @@ export default function Page() {
             <input type="submit" value="Crear sesión" className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors" />
           </form>
         </div>
-        <div className="bg-white rounded-lg shadow-md p-3 h-[70vh] md:mr-5">
+        <div className="bg-white rounded-lg shadow-md p-3 h-[70vh] md:mr-5 overflow-y-scroll">
           {!loading ?
             (
               <ul>
@@ -121,9 +113,6 @@ export default function Page() {
                         <div className="flex items-center gap-2">
                           <span>{sesion.time}</span>
                         </div>
-                        {/* <div className="flex items-center gap-2">
-                        <span>{sesion.seats} asientos</span>
-                      </div> */}
                       </div>
                     </div>
                   ))
