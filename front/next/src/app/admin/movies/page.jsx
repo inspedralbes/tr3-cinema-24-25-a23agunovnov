@@ -9,11 +9,9 @@ export default function Page() {
   const [sesions, setSesions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tickets, setTickets] = useState([]);
-  const [range, setRange] = useState('all');
 
   useEffect(() => {
     (async () => {
-      // console.log("Entra")
       await verSesiones();
       await verTicketsComprados();
       setLoading(false);

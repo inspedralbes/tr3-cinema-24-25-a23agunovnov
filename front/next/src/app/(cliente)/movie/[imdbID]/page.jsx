@@ -2,9 +2,8 @@
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { getInfoMovie, getSession, comprarTicket } from "@/app/plugins/communicationManager";
-import SearchComp from '@/components/SearchComp';
-import AuthComp from "@/components/AuthComp";
 import { useEffect, useState } from "react";
+import socket from '../../../../services/socket';
 
 export default function MoviePage() {
     const { imdbID } = useParams();
@@ -69,6 +68,10 @@ export default function MoviePage() {
         return clickedSeats.length * 6;
     }
 
+    socket.on('newTicket', (ticket) => {
+        console.log(ticket);
+    });
+
     async function comprarEntrada(imdbID) {
         const session = await getSession(imdbID);
         const seats = JSON.parse(session.data.seats);
@@ -100,6 +103,7 @@ export default function MoviePage() {
                 console.log(ticket);
                 const response = await comprarTicket(imdbID, seats, ticket);
                 console.log(response);
+                socket.emit('newTicket', ticket);
                 await cargarData();
             } else {
                 setLoginAuth(true);

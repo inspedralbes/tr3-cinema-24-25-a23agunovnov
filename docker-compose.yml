@@ -32,17 +32,17 @@
         - db
       command: ./entrypoint.sh
 
-    # node:
-    #   image: node:current
-    #   restart: always
-    #   depends_on:
-    #     - db
-    #   ports:
-    #     - 8001:3000
-    #   volumes:
-    #     - ./back:/home/node/app
-    #   working_dir: /home/node/app
-    #   command: bash -c "npm install && node server.js"
+    node:
+      image: node:current
+      restart: always
+      depends_on:
+        - db
+      ports:
+        - 3001:3001
+      volumes:
+        - ./back/webSockets:/home/node/app
+      working_dir: /home/node/app
+      command: bash -c "npm install && node --watch index.js"
 
     next:
       build: ./front/next
