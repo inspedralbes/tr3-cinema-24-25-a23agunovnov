@@ -3,10 +3,13 @@
 import SearchComp from "@/components/SearchComp"
 import { showTickets } from "@/app/plugins/communicationManager"
 import { useEffect, useState } from "react"
+import { useQRCode } from 'next-qrcode';
 
 export default function Tickets() {
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { Canvas } = useQRCode();
+
     useEffect(() => {
         (async () => {
             const data = await showTickets();
@@ -80,11 +83,19 @@ export default function Tickets() {
                                             {/* Código QR */}
                                             <div className="border-t border-gray-700 pt-4 mt-4">
                                                 <div className="flex justify-center">
-                                                    {/* <img
-                                                        src={ticket.qrCode}
-                                                        alt="QR Code"
-                                                        className="w-32 h-32 rounded-lg"
-                                                    /> */}
+                                                    <Canvas
+                                                        text={'https://media.tenor.com/_uIJwdpxI8UAAAAe/mono-serio.png'}
+                                                        options={{
+                                                            errorCorrectionLevel: 'M',
+                                                            margin: 3,
+                                                            scale: 4,
+                                                            width: 200,
+                                                            color: {
+                                                                dark: '#FFFFFF',
+                                                                light: '#E50914',
+                                                            },
+                                                        }}
+                                                    />
                                                 </div>
                                                 <p className="text-center text-sm text-gray-400 mt-2">
                                                     Muestra este código QR en la entrada

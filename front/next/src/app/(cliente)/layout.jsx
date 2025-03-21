@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AuthComp from '@/components/AuthComp';
+import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from 'lucide-react';
 
 export default function DashboardLayout({ children, onClick }) {
     const [searchTerm, setSearchTerm] = useState('');
@@ -36,14 +37,14 @@ export default function DashboardLayout({ children, onClick }) {
                             <h1 className="text-2xl font-bold cursor-pointer" onClick={() => router.push('/dashboard')}>Cinetix</h1>
                         </div>
                         <div className="flex items-center space-x-6 flex-1 justify-end">
-                            <div className="relative w-full max-w-xl">
+                            <div className="relative md:w-full max-w-xl">
                                 <input
                                     type="text"
                                     placeholder="Buscar películas..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     onKeyDown={handleKeyDown}
-                                    className="w-full bg-gray-100 text-gray-900 px-6 py-3 pl-12 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all"
+                                    className="md:w-full bg-gray-100 text-gray-900 px-6 py-3 md:pl-12 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all"
                                 />
                             </div>
                             {token ? (
@@ -81,5 +82,39 @@ export default function DashboardLayout({ children, onClick }) {
             </div >
         </header>
         <main>{children}</main>
+        <footer className="bg-gray-900 text-gray-300">
+            <div className="container mx-auto px-4 py-8">
+                <div className="md:flex md:justify-between gap-8">
+                    {/* Company Info */}
+                    <div>
+                        <h3 className="text-xl font-bold text-white mb-4">Cinetix</h3>
+                        <p className="mb-4">Tu destino para las mejores experiencias cinematográficas</p>
+                    </div>
+
+                    {/* Contact Info */}
+                    <div>
+                        <h3 className="text-xl font-bold text-white mb-4">Contacto</h3>
+                        <div className="space-y-2">
+                            <div className="flex items-center">
+                                <Phone size={16} className="mr-2" />
+                                <span>+34 900 123 456</span>
+                            </div>
+                            <div className="flex items-center">
+                                <Mail size={16} className="mr-2" />
+                                <span>info@cinetix.com</span>
+                            </div>
+                            <div className="flex items-center">
+                                <MapPin size={16} className="mr-2" />
+                                <span>Calle Principal 123, Madrid</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="border-t border-gray-700 mt-8 pt-6 text-center">
+                    <p>&copy; {new Date().getFullYear()} Cinetix. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </footer>
     </>
 }

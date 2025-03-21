@@ -48,14 +48,6 @@ class FuncionesSeeder extends Seeder
             '20:00'
         ];
 
-        $date = [
-            '2025-03-15',
-            '2025-03-16',
-            '2025-03-14',
-            '2025-03-17',
-            '2025-03-18'
-        ];
-
         $seat_id = 0;
         for ($i = 1; $i <= 12; $i++) {
             for ($j = 0; $j < 10; $j++) {
@@ -74,7 +66,7 @@ class FuncionesSeeder extends Seeder
                 'imdb' => $imdb[$i],
                 'title' => $title[$i],
                 'time' => $time[$i % count($time)],
-                'date' => $date[$i % count($date)],
+                'date' => now()->addDays(rand(0, 5))->toDateString(),
                 'seats' => json_encode($seats)
             ]);
         }

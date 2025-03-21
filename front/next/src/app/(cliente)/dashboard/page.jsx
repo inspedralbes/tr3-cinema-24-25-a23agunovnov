@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { viewSessions, getInfoMovie } from "@/app/plugins/communicationManager";
 import MovieComp from '@/components/MovieComp';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
   const [movies, setMovies] = useState([]);
@@ -10,6 +11,7 @@ export default function Page() {
   const [sesions, setSesions] = useState([]);
   const [centerIndex, setCenterIndex] = useState(2);
   const [topMovies, setTopMovies] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     const cargarDatos = async () => {
@@ -25,7 +27,7 @@ export default function Page() {
           const peliculas = await Promise.all(peliculasPromise);
           setMovies(peliculas);
           for (let index = 0; index < 4; index++) {
-            aux.push(peliculas[index]);            
+            aux.push(peliculas[index]);
           }
           setTopMovies(aux);
         }
@@ -100,31 +102,24 @@ export default function Page() {
     <>
       <div className='w-full bg-black'>
         <div className="relative overflow-hidden">
-          <div
-            className="absolute bg-black inset-0 z-0 bg-cover bg-center transition-all duration-300"
-            style={{
-              backgroundImage: `url(${movies[centerIndex].Poster})`,
-              filter: 'blur(50px)',
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-transparent" />
-          </div>
+          {movies.length > 0 &&
+            (<div
+              className="absolute bg-black inset-0 z-0 bg-cover bg-center transition-all duration-300"
+              style={{
+                backgroundImage: `url(${movies[centerIndex].Poster})`,
+                filter: 'blur(50px)',
+              }}
+            >
 
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-transparent" />
+            </div>
+            )
+          }
           <div className="relative z-10 md:my-20 my-5">
             <div className="w-full flex justify-center">
-              <div className="flex w-full justify-between mb-8 max-w-7xl items-center">
+              <div className="w-full text-center md:text-left mt-3 mb-2 max-w-7xl items-center">
                 <h1 className="text-3xl font-bold text-white">Próximas funciones</h1>
-                <div className="flex space-x-2 items-center">
-                  <span className="text-lg text-white">Seleccionar dia: </span>
-                  <select name="" id="" className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-white cursor-pointer">
-                    {getNextFiveDays().map((dia, index) => (
-                      <option key={index} value={dia.fecha}>
-                        {dia.fecha}
-                      </option>
-                    ))}
-                  </select>
-                </div>
               </div>
             </div>
 
@@ -147,7 +142,7 @@ export default function Page() {
               </button>
 
               <div className="flex justify-center items-center gap-4 transition-all duration-500 w-full overflow-hidden my-[18em]">
-                {getVisibleMovies.map(({ movie, position }) => {
+                {getVisibleMovies.length > 0 && movies.length > 0 && getVisibleMovies.map(({ movie, position }) => {
                   const isCenter = position === 0;
 
                   return (
@@ -184,7 +179,8 @@ export default function Page() {
                           <button className={`
                              w-full bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all duration-300 cursor-pointer hover:scale-103
                             ${isCenter ? 'py-3 text-lg' : 'py-2 text-base'}
-                          `}>
+                            `}
+                            onClick={() => router.push(`/movie/${movie.imdbID}`)}>
                             Comprar entradas
                           </button>
                         </div>
@@ -199,7 +195,7 @@ export default function Page() {
 
         <main className="container mx-auto px-4 py-8">
           <p className='text-center text-white mb-7 text-4xl'>Més venuts</p>
-          <div className="flex justify-center gap-6">
+          <div className="grid grid-cols-2 md:flex md:justify-center gap-6">
             {topMovies.length > 0 ? (
               topMovies.map((movie, index) => (
                 <MovieComp key={index} movie={movie} />
@@ -209,7 +205,7 @@ export default function Page() {
             )}
           </div>
         </main>
-      </div>
+      </div >
 
     </>
   );

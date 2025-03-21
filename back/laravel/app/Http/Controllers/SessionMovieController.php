@@ -22,7 +22,7 @@ class SessionMovieController extends Controller implements HasMiddleware
     {
         try {
             // $sesiones = SessionMovie::where('date', '>=', today())->get();
-            $sesiones = SessionMovie::all();
+            $sesiones = SessionMovie::where('date', '>=', today())->get();
             return response()->json(['success' => true, 'data' => $sesiones]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'We have a problem try-catch: ' . $e->getMessage()], 500);

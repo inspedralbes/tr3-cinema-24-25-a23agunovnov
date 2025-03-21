@@ -1,8 +1,8 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { getInfoMovie, getSession, comprarTicket } from "@/app/plugins/communicationManager";
 import { useEffect, useState } from "react";
+import Swal from 'sweetalert2'
 import socket from '@/services/socket';
 
 export default function MoviePage() {
@@ -15,6 +15,7 @@ export default function MoviePage() {
     const [clickedSeats, setClickedSeats] = useState([]);
     const [formattedDate, setFormattedDate] = useState('');
     const [loginAuth, setLoginAuth] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         (async () => {
@@ -73,12 +74,12 @@ export default function MoviePage() {
 
     socket.on('newTicket', async (ticket) => {
         const butacas = JSON.parse(ticket.seats);
-        setSeats(prevSeats => 
-            prevSeats.map(s => 
-                
+        setSeats(prevSeats =>
+            prevSeats.map(s =>
+
                 butacas.find(b => b.id === s.id)
-                ? { ...s, available: false }
-                : s
+                    ? { ...s, available: false }
+                    : s
             )
         );
     });
@@ -112,11 +113,32 @@ export default function MoviePage() {
                     'seats': JSON.stringify(newSeats),
                     'total': calculateTotal()
                 }
-                // console.log(ticket);
                 const response = await comprarTicket(imdbID, seats, ticket);
-                // console.log(response);
                 socket.emit('newTicket', ticket);
                 await cargarData();
+                Swal.fire({
+                    title: "Ticket comprado con éxito",
+                    text: "¡Disfruta de la película!",
+                    icon: "success",
+                    width: 600,
+                    padding: "3em",
+                    showConfirmButton: true,
+                    confirmButtonText: "Ver tickets",
+                    confirmButtonColor: "#007BFF", // Azul para el fondo del botón
+                    confirmButtonTextColor: "#FFF", // Blanco para el texto del botón
+                    showCancelButton: true,
+                    cancelButtonText: "Cancelar",
+                    cancelButtonColor: "#d33",
+                    color: "#000",
+                    background: "#fff",
+                    backdrop: `
+                      rgba(0, 0, 0, 0.42)
+                    `
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        router.push('/tickets');
+                    }
+                });
             } else {
                 setLoginAuth(true);
             }
@@ -137,9 +159,9 @@ export default function MoviePage() {
                             <p className="font-bold text-center mb-5 text-xl">Seleccionar asientos <span className="font-light text-base">(max 10)</span></p>
                             <div className="grid grid-cols-10 gap-2">
                                 {seats?.map((seat, index) => (
-                                    <div className="flex justify-center" key={index}>
-                                        <svg width="2.5em" height="2.5em" viewBox="0 0 167 167" fill="none" xmlns="http://www.w3.org/2000/svg" className={seat.available ? "cursor-pointer" : "cursor-not-allowed"} onClick={() => {
-                                            if (seat.available) {
+                                    <div className="flex justify-center" key={seat.id}>
+                                        <svg width="2.5em" height="2.5em" viewBox="0 0 167 167" fill="none" xmlns="http://www.w3.org/2000/svg" className={`hover:scale-110 transition ${seat.available ? "cursor-pointer" : "cursor-not-allowed"}`} onClick={() => {
+                                            if (seat.available && clickedSeats.length < 10) {
                                                 setClickedSeats((prevValue) => {
                                                     if (seatSelected(seat.id)) {
                                                         return prevValue.filter((s) => s.id !== seat.id);
@@ -231,7 +253,7 @@ export default function MoviePage() {
                                 </button>
                             </div>
                         </div>
-                        <button className="w-full bg-gray-800 hover:bg-gray-700 py-2 rounded font-semibold transition flex items-center justify-center gap-2 cursor-pointer" onClick={() => setChooseSeats(true)}>Elegir asientos</button>
+                        <button className={`w-full py-2 rounded font-semibold transition flex items-center justify-center gap-2 cursor-pointer ${clickedSeats.length > 0 ? 'bg-red-600' : 'bg-gray-800 hover:bg-gray-700'}`} onClick={() => setChooseSeats(true)}>Elegir asientos</button>
 
                         <div className="border-t border-gray-800 pt-6 mb-6">
                             {clickedSeats ? (
