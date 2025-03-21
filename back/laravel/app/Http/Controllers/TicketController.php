@@ -6,6 +6,8 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
 
 class TicketController extends Controller
 {
@@ -100,6 +102,35 @@ class TicketController extends Controller
                 'seats' => $validated['seats'],
                 'total' => $validated['total']
             ]);
+
+            $dataTicket = Ticket::where('id', $ticket->id)->with('sessions:id,title,imdb,time,date')->first();
+
+            $pdf = Pdf::loadView('mails.newTicket', [
+                'name' => $user->name,
+                'title' => $dataTicket->sessions->title,
+                'date' => $dataTicket->sessions->date,
+                'time' => $dataTicket->sessions->time,
+                'sala' => $dataTicket->sala,
+                'seats' => json_decode($dataTicket->seats),
+                'total' => $dataTicket->total,
+            ]);
+
+            $pdfPath = storage_path('app/public/ticket_' . $ticket->id . '.pdf');
+            $pdf->save($pdfPath);
+
+            Mail::send([], [], function ($message) use ($user, $pdfPath) {
+                $message->to($user->email)
+                    ->subject('Compra de ticket')
+                    // ->html("<p>Hola, verifica tu cuenta haciendo clic en el siguiente enlace:</p><p><a href='" . url('/api/verify/' . $verificationToken) . "'>Verificar cuenta</a></p>")
+                    ->attach($pdfPath, [
+                        'as' => 'ticket_compra.pdf',
+                        'mime' => 'application/pdf'
+                    ]);
+            });
+
+            if (file_exists($pdfPath)) {
+                unlink($pdfPath);
+            }
 
             if (!$ticket) {
                 return response()->json(['success' => false, 'message' => 'We have a problem'], 500);
