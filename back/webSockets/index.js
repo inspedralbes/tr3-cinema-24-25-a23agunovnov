@@ -30,11 +30,18 @@ io.on('connection', (socket) => {
     socket.on('newTicket', (ticket) => {
         console.log(ticket);
 
-        io.broadcast.emit('newTicket', ticket);
+        io.to(ticket.imdbID).emit('newTicket', ticket);
     });
 
     socket.on('disconnect', () => {
         console.log('user disconnected');
+    });
+
+    socket.on('joinRoom', (imdb) => {
+        socket.leaveAll();
+        socket.join(imdb);
+        console.log("ROOMS: ", socket.rooms);
+        console.log(`User joined room: ${imdb}`);
     });
 });
 

@@ -3,18 +3,18 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { getInfoMovie, getSession, comprarTicket } from "@/app/plugins/communicationManager";
 import { useEffect, useState } from "react";
-import socket from '../../../../services/socket';
+import socket from '@/services/socket';
 
 export default function MoviePage() {
     const { imdbID } = useParams();
     const [sesion, setSesion] = useState([]);
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
+    const [seats, setSeats] = useState(sesion.seats || []);
     const [chooseSeats, setChooseSeats] = useState(false);
     const [clickedSeats, setClickedSeats] = useState([]);
     const [formattedDate, setFormattedDate] = useState('');
     const [loginAuth, setLoginAuth] = useState(false);
-    const token = localStorage.getItem('token');
 
     useEffect(() => {
         (async () => {
@@ -30,13 +30,16 @@ export default function MoviePage() {
                 day: 'numeric',
             })
         );
+        // console.log("Sesión: ", sesion);
+        setSeats(sesion.seats);
+        socket.emit('joinRoom', sesion.imdbID);
     }, [sesion.date]);
 
     async function cargarData() {
         const movie = await getInfoMovie(imdbID);
-        console.log("Response de la infoPeli: ", movie);
+        // console.log("Response de la infoPeli: ", movie);
         const session = await getSession(imdbID);
-        console.log("Response de la sesión: ", session)
+        // console.log("Response de la sesión: ", session)
         const info = {
             "imdbID": movie.imdbID,
             "title": movie.Title,
@@ -68,8 +71,16 @@ export default function MoviePage() {
         return clickedSeats.length * 6;
     }
 
-    socket.on('newTicket', (ticket) => {
-        console.log(ticket);
+    socket.on('newTicket', async (ticket) => {
+        const butacas = JSON.parse(ticket.seats);
+        setSeats(prevSeats => 
+            prevSeats.map(s => 
+                
+                butacas.find(b => b.id === s.id)
+                ? { ...s, available: false }
+                : s
+            )
+        );
     });
 
     async function comprarEntrada(imdbID) {
@@ -87,7 +98,7 @@ export default function MoviePage() {
         });
 
         if (isOk) {
-            if (token) {
+            if (localStorage.getItem('token')) {
                 const newSeats = clickedSeats.map((seat) => {
                     return {
                         "id": seat.id,
@@ -96,13 +107,14 @@ export default function MoviePage() {
                 })
                 const ticket = {
                     'ID_session': session.data.id,
+                    'imdbID': imdbID,
                     'sala': "10A",
                     'seats': JSON.stringify(newSeats),
                     'total': calculateTotal()
                 }
-                console.log(ticket);
+                // console.log(ticket);
                 const response = await comprarTicket(imdbID, seats, ticket);
-                console.log(response);
+                // console.log(response);
                 socket.emit('newTicket', ticket);
                 await cargarData();
             } else {
@@ -124,7 +136,7 @@ export default function MoviePage() {
                         <div className="w-[80rem] bg-white rounded-lg p-8 text-black" onClick={(e) => e.stopPropagation()}>
                             <p className="font-bold text-center mb-5 text-xl">Seleccionar asientos <span className="font-light text-base">(max 10)</span></p>
                             <div className="grid grid-cols-10 gap-2">
-                                {sesion.seats?.map((seat, index) => (
+                                {seats?.map((seat, index) => (
                                     <div className="flex justify-center" key={index}>
                                         <svg width="2.5em" height="2.5em" viewBox="0 0 167 167" fill="none" xmlns="http://www.w3.org/2000/svg" className={seat.available ? "cursor-pointer" : "cursor-not-allowed"} onClick={() => {
                                             if (seat.available) {
