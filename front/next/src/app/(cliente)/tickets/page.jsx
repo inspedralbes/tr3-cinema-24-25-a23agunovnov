@@ -1,25 +1,35 @@
 'use client'
 
-import SearchComp from "@/components/SearchComp"
 import { showTickets } from "@/app/plugins/communicationManager"
 import { useEffect, useState } from "react"
 import { useQRCode } from 'next-qrcode';
+import { useAuth } from "@/context/AuthContext";
 
 export default function Tickets() {
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
     const { Canvas } = useQRCode();
+    const { user, isAuth, setLoginAuth } = useAuth();
 
     useEffect(() => {
         (async () => {
-            const data = await showTickets();
-            for (let index = 0; index < data.data.length; index++) {
-                data.data[index].seats = JSON.parse(data.data[index].seats);
+            if (localStorage.getItem('token')) {
+                await verTickets();
+                setLoading(false);
+            } else if (!isAuth) {
+                console.log('Usuario no autenticado:', isAuth);
+                setLoginAuth(true);
             }
-            setTickets(data);
-            setLoading(false);
         })();
-    }, []);
+    }, [isAuth, user]);
+
+    async function verTickets() {
+        const data = await showTickets();
+        for (let index = 0; index < data.data.length; index++) {
+            data.data[index].seats = JSON.parse(data.data[index].seats);
+        }
+        setTickets(data);
+    }
     return <>
         <div className="min-h-screen bg-[#1a1a1a] text-white py-8">
             <div className="max-w-7xl mx-auto px-4">
@@ -27,7 +37,7 @@ export default function Tickets() {
 
                 {!loading ?
                     (
-                        tickets.data.length > 0 ? (
+                        tickets?.data?.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {tickets.data.map((ticket) => (
                                     <div

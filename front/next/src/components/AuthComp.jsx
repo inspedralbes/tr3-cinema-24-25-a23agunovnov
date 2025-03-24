@@ -1,7 +1,8 @@
-'use cliente'
+'use client'
 
 import { useState } from "react";
 import { loginCliente, registerCliente } from "@/app/plugins/communicationManager";
+import { useAuth } from "@/context/AuthContext";
 
 export default function AuthComp({ onClose }) {
     const [name, setName] = useState('');
@@ -9,39 +10,40 @@ export default function AuthComp({ onClose }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLogin, setIsLogin] = useState(true);
+    const { login } = useAuth();
 
     async function handleSubmit(e) {
         e.preventDefault();
-        if (isLogin) {
-            const datos = {
-                "email": email,
-                "password": password
-            }
-            const response = await loginCliente(datos);
-            if (response && response.success) {
-                console.log("Inicio de sesión exitoso: ", response)
-                localStorage.setItem('token', response.token);
-                localStorage.setItem('userID', response.user.id);
-                localStorage.setItem('name', response.user.name);
-                localStorage.setItem('email', response.user.email);
-                onClose();
+
+        try {
+            if (isLogin) {
+                const datos = {
+                    "email": email,
+                    "password": password
+                }
+                const response = await loginCliente(datos);
+                if (response && response.success) {
+                    login(response);
+                    onClose();
+                } else {
+                    console.log("Ocurrió un problema al iniciar sesión: ", response)
+                }
             } else {
-                console.log("Ocurrió un problema al iniciar sesión: ", response)
+                const datos = {
+                    "name": name,
+                    "phone": telefono,
+                    "email": email,
+                    "password": password
+                }
+                const response = await registerCliente(datos);
+                if (response && response.success) {
+                    setIsLogin(true);
+                } else {
+                    console.log("Ocurrió un problema al registrarse: ", response)
+                }
             }
-        } else {
-            const datos = {
-                "name": name,
-                "phone": telefono,
-                "email": email,
-                "password": password
-            }
-            const response = await registerCliente(datos);
-            if (response && response.success) {
-                console.log("Registro exitoso: ", response)
-                setIsLogin(true);
-            } else {
-                console.log("Ocurrió un problema al registrarse: ", response)
-            }
+        } catch (error) {
+            console.error(error);
         }
     }
 

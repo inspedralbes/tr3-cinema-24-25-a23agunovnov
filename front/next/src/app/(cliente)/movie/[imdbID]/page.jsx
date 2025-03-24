@@ -2,6 +2,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { getInfoMovie, getSession, comprarTicket } from "@/app/plugins/communicationManager";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 import Swal from 'sweetalert2'
 import socket from '@/services/socket';
 
@@ -14,7 +15,7 @@ export default function MoviePage() {
     const [chooseSeats, setChooseSeats] = useState(false);
     const [clickedSeats, setClickedSeats] = useState([]);
     const [formattedDate, setFormattedDate] = useState('');
-    const [loginAuth, setLoginAuth] = useState(false);
+    const { setLoginAuth } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
