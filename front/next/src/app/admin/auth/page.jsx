@@ -14,7 +14,8 @@ export default function Login() {
         e.preventDefault();
 
         try {
-            const response = await loginAdmin(email, password);
+            console.log(email, password);
+            const response = await loginAdmin({email, password});
             if(response.success) {
                 localStorage.setItem('tokenAdmin', response.token);
                 router.push('/admin');

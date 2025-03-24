@@ -2,6 +2,7 @@ const Host = "http://localhost:8000/api";
 const omdbAPI = "http://www.omdbapi.com/?apikey=ea676a76";
 
 const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+const tokenAdmin = typeof window !== 'undefined' ? localStorage.getItem('tokenAdmin') : '';
 
 // Crear sesión de película
 export async function sessionCreate(sesionData) {
@@ -18,7 +19,7 @@ export async function sessionCreate(sesionData) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': token ? `Bearer ${token}` : ''
+                    'Authorization': tokenAdmin ? `Bearer ${tokenAdmin}` : ''
                 },
                 body: JSON.stringify({
                     "imdb": sesionData.imdb,
@@ -82,6 +83,7 @@ export async function getSession(imdb) {
 
 export async function comprarTicket(imdbID, seats, ticket) {
     try {
+        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
         const responseSeats = await fetch(`${Host}/session/${imdbID}`, {
             method: 'PUT',
             headers: {
@@ -92,7 +94,7 @@ export async function comprarTicket(imdbID, seats, ticket) {
                 "seats": seats
             })
         });
-        const newSeats = responseSeats.json();
+        const newSeats = await responseSeats.json();
 
         const responseTicket = await fetch(`${Host}/ticket`, {
             method: 'POST',
@@ -102,7 +104,7 @@ export async function comprarTicket(imdbID, seats, ticket) {
             },
             body: JSON.stringify(ticket)
         });
-        const newTicket = responseTicket.json();
+        const newTicket = await responseTicket.json();
         const data = { newSeats, newTicket };
         return data;
     } catch (error) {
@@ -214,9 +216,25 @@ export async function getInfoSessions() {
     try {
         const response = await fetch (`${Host}/getAllTickets/`, {
             headers: {
+                'Authorization': tokenAdmin ? `Bearer ${tokenAdmin}` : ''
+            }
+        });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error: ', error);
+    }
+}
+
+export async function logout() {
+    try {
+        const response = await fetch(`${Host}/auth/logout`, {
+            method: 'POST',
+            headers: {
                 'Authorization': token ? `Bearer ${token}` : ''
             }
         });
+
         const data = await response.json();
         return data;
     } catch (error) {

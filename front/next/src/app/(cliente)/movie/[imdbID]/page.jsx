@@ -114,32 +114,43 @@ export default function MoviePage() {
                     'seats': JSON.stringify(newSeats),
                     'total': calculateTotal()
                 }
-                const response = await comprarTicket(imdbID, seats, ticket);
-                socket.emit('newTicket', ticket);
-                await cargarData();
-                Swal.fire({
-                    title: "Ticket comprado con éxito",
-                    text: "¡Disfruta de la película!",
-                    icon: "success",
-                    width: 600,
-                    padding: "3em",
-                    showConfirmButton: true,
-                    confirmButtonText: "Ver tickets",
-                    confirmButtonColor: "#007BFF", // Azul para el fondo del botón
-                    confirmButtonTextColor: "#FFF", // Blanco para el texto del botón
-                    showCancelButton: true,
-                    cancelButtonText: "Cancelar",
-                    cancelButtonColor: "#d33",
-                    color: "#000",
-                    background: "#fff",
-                    backdrop: `
-                      rgba(0, 0, 0, 0.42)
-                    `
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        router.push('/tickets');
+                try {
+                    const response = await comprarTicket(imdbID, seats, ticket);
+                    if (response.newTicket.success) {
+                        socket.emit('newTicket', ticket);
+                        await cargarData();
+                        Swal.fire({
+                            title: "Ticket comprado con éxito",
+                            text: "¡Disfruta de la película!",
+                            icon: "success",
+                            width: 600,
+                            padding: "3em",
+                            showConfirmButton: true,
+                            confirmButtonText: "Ver tickets",
+                            confirmButtonColor: "#007BFF", // Azul para el fondo del botón
+                            showCancelButton: true,
+                            cancelButtonText: "Cancelar",
+                            cancelButtonColor: "#d33",
+                            color: "#000",
+                            background: "#fff",
+                            backdrop: `
+                          rgba(0, 0, 0, 0.42)
+                        `
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                router.push('/tickets');
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Alguna cosa ha sortit malament!",
+                        });
                     }
-                });
+                } catch (error) {
+                    console.error("Error: ", error);
+                }
             } else {
                 setLoginAuth(true);
             }

@@ -9,8 +9,6 @@ export default function DashboardLayout({ children, onClick }) {
     const [token, setToken] = useState(null);
     const [toggleDrop, setToggleDrop] = useState(false);
     const [loginAuth, setLoginAuth] = useState(false);
-    const [username, setUsername] = useState('');
-    const [sidebarOpen, setSidebarOpen] = useState(true);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
@@ -23,7 +21,6 @@ export default function DashboardLayout({ children, onClick }) {
     ];
 
     useEffect(() => {
-        setUsername(localStorage.getItem('name'));
         setToken(localStorage.getItem('tokenAdmin'));
         verifyToken();
     }, []);

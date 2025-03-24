@@ -19,7 +19,7 @@ function DashboardContent({ children }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [token, setToken] = useState(null);
     const [toggleDrop, setToggleDrop] = useState(false);
-    const { user, logout, loginAuth, setLoginAuth } = useAuth();
+    const { user, logoutAuth, loginAuth, setLoginAuth, isAuth } = useAuth();
     const router = useRouter();
 
     async function buscarMovie() {
@@ -83,7 +83,7 @@ function DashboardContent({ children }) {
                                             role="menuitem">
                                             Mis tickets
                                         </li>
-                                        <li onClick={() => {logout(); setToggleDrop(false)}} className="cursor-pointer block px-4 py-2 text-sm text-red-700 hover:bg-gray-100"
+                                        <li onClick={() => {logoutAuth(); setToggleDrop(false)}} className="cursor-pointer block px-4 py-2 text-sm text-red-700 hover:bg-gray-100"
                                             role="menuitem">
                                             Cerrar sesión
                                         </li>

@@ -2,10 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { createContext, useState, useContext, useEffect } from "react";
+import { logout } from "@/app/plugins/communicationManager";
 
 const AuthContext = createContext(null);
 
-export function AuthProvider({children}) {
+export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loginAuth, setLoginAuth] = useState(false);
     const [isAuth, setIsAuth] = useState(false);
@@ -13,7 +14,7 @@ export function AuthProvider({children}) {
 
     useEffect(() => {
         const user = localStorage.getItem("user");
-        if(user) {
+        if (user) {
             const parsedUser = JSON.parse(user);
             if (parsedUser.token) {
                 setIsAuth(true);
@@ -27,17 +28,25 @@ export function AuthProvider({children}) {
         setUser(userData);
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("token", userData.token);
+        window.location.reload();
     }
 
-    function logout() {
-        setUser(null);
-        setIsAuth(false);
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
+    async function logoutAuth() {
+        try {
+            const response = await logout();
+            if (response.success) {
+                setUser(null);
+                setIsAuth(false);
+                localStorage.removeItem("user");
+                localStorage.removeItem("token");
+            }
+        } catch (error) {
+            console.error("Error: ", error)
+        }
     }
 
     return (
-        <AuthContext.Provider value={{user, login, logout, loginAuth, setLoginAuth, isAuth}}>
+        <AuthContext.Provider value={{ user, login, logout, loginAuth, setLoginAuth, isAuth, logoutAuth}}>
             {children}
         </AuthContext.Provider>
     );
