@@ -2,12 +2,15 @@
 
 import { sessionCreate, getInfoMovie, viewSessions } from "@/app/plugins/communicationManager";
 import { useEffect, useState } from "react";
+import SessionComp from "@/components/SessionComp";
+import { usePopUp } from "@/context/TogglePopUps";
 
 export default function Page() {
   const [sesions, setSesions] = useState([]);
   const [movies, setMovies] = useState([]);
   const [dates, setDates] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { setSelectedSession, setEditedSession, setIsEditing } = Auth
 
   useEffect(() => {
     (async () => {
@@ -76,8 +79,17 @@ export default function Page() {
     );
   }
 
+  const handleOpenPopup = (movie) => {
+    setSelectedSession(movie);
+    setEditedSession(movie);
+    setIsEditing(false);
+  };
+
   return (
     <>
+      {selectedSession &&
+        <SessionComp />
+      }
       <div>
         <h1 className="text-3xl font-bold text-center">Sesiones</h1>
         <div>
@@ -88,7 +100,7 @@ export default function Page() {
                 {movies.sort((a, b) => a.time - b.time).map((movie, index) => {
                   if (movie.date === date) {
                     return (
-                      <div key={index}>
+                      <div key={index} onClick={() => { handleOpenPopup(movie) }}>
                         <div className="bg-white shadow-lg rounded-lg w-[180px] relative">
                           <img
                             src={movie.Poster}
