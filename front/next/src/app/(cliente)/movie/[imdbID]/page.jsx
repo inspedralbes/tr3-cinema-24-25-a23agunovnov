@@ -1,4 +1,5 @@
 "use client";
+
 import { useParams, useRouter } from "next/navigation";
 import { getInfoMovie, getSession, comprarTicket } from "@/app/plugins/communicationManager";
 import { useEffect, useState } from "react";
@@ -25,6 +26,7 @@ export default function MoviePage() {
     }, []);
 
     useEffect(() => {
+        console.log("SESION: ", sesion);
         setFormattedDate(
             new Date(sesion.date).toLocaleDateString('es-ES', {
                 weekday: 'short',
@@ -39,9 +41,7 @@ export default function MoviePage() {
 
     async function cargarData() {
         const movie = await getInfoMovie(imdbID);
-        // console.log("Response de la infoPeli: ", movie);
         const session = await getSession(imdbID);
-        // console.log("Response de la sesión: ", session)
         const info = {
             "imdbID": movie.imdbID,
             "title": movie.Title,
@@ -57,7 +57,8 @@ export default function MoviePage() {
             "poster": movie.Poster,
             "showtime": session.data.time,
             "date": session.data.date,
-            "seats": JSON.parse(session.data.seats)
+            "seats": JSON.parse(session.data.seats),
+            "vip": session.data.vip
         };
         setSesion(info);
         setClickedSeats([]);
@@ -70,14 +71,19 @@ export default function MoviePage() {
     }
 
     function calculateTotal() {
-        return clickedSeats.length * 6;
+        let total;
+        if (sesion.vip) {
+            total = clickedSeats.filter((s) => s.row === 6).length * 8 + clickedSeats.filter((s) => s.row !== 6).length * 6;
+        } else {
+            total = clickedSeats.length * 6;
+        }
+        return total;
     }
 
     socket.on('newTicket', async (ticket) => {
         const butacas = JSON.parse(ticket.seats);
         setSeats(prevSeats =>
             prevSeats.map(s =>
-
                 butacas.find(b => b.id === s.id)
                     ? { ...s, available: false }
                     : s
@@ -169,6 +175,8 @@ export default function MoviePage() {
                     <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center" onClick={() => setChooseSeats(false)}>
                         <div className="w-[80rem] bg-white rounded-lg p-8 text-black" onClick={(e) => e.stopPropagation()}>
                             <p className="font-bold text-center mb-5 text-xl">Seleccionar asientos <span className="font-light text-base">(max 10)</span></p>
+
+                            {/* ASIENTOS */}
                             <div className="grid grid-cols-10 gap-2">
                                 {seats?.map((seat, index) => (
                                     <div className="flex justify-center" key={seat.id}>
@@ -184,14 +192,14 @@ export default function MoviePage() {
                                             }
                                         }}>
                                             <path d="M0 26C0 11.6406 11.6406 0 26 0H141C155.359 0 167 11.6406 167 26V110C167 141.48 141.48 167 110 167H57C25.5198 167 0 141.48 0 110V26Z"
-                                                fill={
-                                                    seat.available ? (seatSelected(seat.id) ? "#98FF96" : "#D9D9D9") : "#FF0000"
-                                                }
+                                                fill={seat.available ? (seatSelected(seat.id) ? "#98FF96" : (seat.row === 6 && sesion.vip ? "#FFFF00" : "#D9D9D9")) : "#FF0000"}
                                             />
                                         </svg>
                                     </div>
                                 ))}
                             </div>
+
+                            {/* TELEVISOR */}
                             <div className="w-full mt-8">
                                 <svg width="100%" height="100px" viewBox="0 0 1005 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M875.564 64H129.436L0 0H1005L875.564 64Z" fill="#D9D9D9" />
@@ -269,9 +277,17 @@ export default function MoviePage() {
 
                         <div className="border-t border-gray-800 pt-6 mb-6">
                             {clickedSeats ? (
-                                <div className="flex justify-between mb-2">
-                                    <span>Tickets ({clickedSeats.length} × <span className="font-bold">6€</span>)</span>
-                                    <span>${calculateTotal()}</span>
+                                <div>
+                                    <div className="flex justify-between mb-2">
+                                        <span>Ticket normal ({sesion.vip ? clickedSeats.filter((s) => s.row !== 6).length : clickedSeats.length} × <span className="font-bold">6€</span>)</span>
+                                        <span>${sesion.vip ? clickedSeats.filter((s) => s.row !== 6).length * 6 : calculateTotal()}</span>
+                                    </div>
+                                    {sesion.vip &&
+                                        <div className="flex justify-between mb-2">
+                                            <span>Ticket VIP ({clickedSeats.filter((s) => s.row === 6).length} × <span className="font-bold">8€</span>)</span>
+                                            <span>${clickedSeats.filter((s) => s.row === 6).length * 8}</span>
+                                        </div>
+                                    }
                                 </div>
                             ) : (null)}
                             <div className="flex justify-between font-bold">
