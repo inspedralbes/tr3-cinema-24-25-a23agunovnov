@@ -1,11 +1,12 @@
 'use client'
-import { sessionCreate, getInfoMovie, viewSessions   } from "@/app/plugins/communicationManager";
+import { sessionCreate, getInfoMovie, viewSessions } from "@/app/plugins/communicationManager";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   const [imdb, setImdb] = useState('');
   const [movie, setMovie] = useState([]);
   const [movieName, setMovieName] = useState('');
+  const [vipCheck, setVipCheck] = useState(false);
   const [sesions, setSesions] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,6 +45,7 @@ export default function Page() {
       "title": movieName,
       "time": time,
       "date": date,
+      "vip": vipCheck
     }
     console.log("sesionData: ", sesionData);
     try {
@@ -92,6 +94,13 @@ export default function Page() {
               Fecha de la función
             </label>
             <input type="date" name="date" className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required id="date" />
+            <input
+              type="checkbox"
+              name="vipCheck"
+              id="vipcheck"
+              onChange={(e) => setVipCheck(e.target.checked)}
+            />{" "}
+            Fila VIP
             <input type="submit" value="Crear sesión" className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors" />
           </form>
         </div>

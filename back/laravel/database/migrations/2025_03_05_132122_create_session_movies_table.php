@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('time');
             $table->date('date');
             $table->json('seats');
+            $table->boolean('vip')->default(false);
         });
     }
 

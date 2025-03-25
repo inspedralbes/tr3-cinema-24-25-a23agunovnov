@@ -1,7 +1,4 @@
-'use client';
-
-import { useRouter } from "next/navigation";
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext, useEffect } from 'react';
 
 const PopUpContext = createContext(null);
 
@@ -11,9 +8,9 @@ export function PopUpProvider({ children }) {
     const [editedSession, setEditedSession] = useState(null);
 
     return (
-        <PopUpProvider.Provider value={{ selectedSession, setSelectedSession, isEditing, setIsEditing, editedSession, setEditedSession,  }}>
+        <PopUpContext.Provider value={{ selectedSession, setSelectedSession, isEditing, setIsEditing, editedSession, setEditedSession }}>
             {children}
-        </PopUpProvider.Provider>
+        </PopUpContext.Provider>
     );
 }
 

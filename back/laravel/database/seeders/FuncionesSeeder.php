@@ -67,7 +67,8 @@ class FuncionesSeeder extends Seeder
                 'title' => $title[$i],
                 'time' => $time[$i % count($time)],
                 'date' => now()->addDays(rand(0, 5))->toDateString(),
-                'seats' => json_encode($seats)
+                'seats' => json_encode($seats),
+                'vip' => $i % 2 === 0
             ]);
         }
 

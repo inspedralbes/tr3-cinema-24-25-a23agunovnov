@@ -7,6 +7,8 @@ const tokenAdmin = typeof window !== 'undefined' ? localStorage.getItem('tokenAd
 // Crear sesión de película
 export async function sessionCreate(sesionData) {
     try {
+        const tokenUse = typeof window !== 'undefined' ? localStorage.getItem('tokenAdmin') : '';
+
         const movie = await fetch(`${omdbAPI}&i=${sesionData.imdb}`);
         const dataMovie = movie.json();
         if (dataMovie && dataMovie.Response === 'False') {
@@ -19,13 +21,14 @@ export async function sessionCreate(sesionData) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': tokenAdmin ? `Bearer ${tokenAdmin}` : ''
+                    'Authorization': tokenUse ? `Bearer ${tokenUse}` : ''
                 },
                 body: JSON.stringify({
                     "imdb": sesionData.imdb,
                     "title": sesionData.title,
                     "time": sesionData.time,
-                    "date": sesionData.date
+                    "date": sesionData.date,
+                    "vip": sesionData.vip
                 })
             });
             const data = response.json();
@@ -110,6 +113,50 @@ export async function comprarTicket(imdbID, seats, ticket) {
     } catch (error) {
         console.error("Error: ", error);
         return null;
+    }
+}
+
+export async function editarSesion(datos) {
+    try {
+        const tokenUse = typeof window !== 'undefined' ? localStorage.getItem('tokenAdmin') : '';
+
+        const response = await fetch(`${Host}/session/${datos.sesionID}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': tokenUse ? `Bearer ${tokenUse}` : ''
+            },
+            body: JSON.stringify({
+                "time": datos.time,
+                "date": datos.date
+            })
+        });
+
+        const data = await response.json();
+
+        return data;
+    } catch (error) {
+        console.error("Error: ", error)
+    }
+}
+
+export async function eliminarSesion(sesionID) {
+    try {
+        const tokenUse = typeof window !== 'undefined' ? localStorage.getItem('tokenAdmin') : '';
+
+        const response = await fetch(`${Host}/session/${sesionID}`, {
+            method: 'DELETE',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': tokenUse ? `Bearer ${tokenUse}` : ''
+            }
+        });
+
+        const data = await response.json();
+
+        return data;
+    } catch (error) {
+        console.error("Error: ", error)
     }
 }
 
@@ -218,7 +265,7 @@ export async function registerAdmin(datos) {
 export async function getInfoSessions() {
     try {
         const tokenUse = typeof window !== 'undefined' ? localStorage.getItem('tokenAdmin') : '';
-        const response = await fetch (`${Host}/getAllTickets/`, {
+        const response = await fetch(`${Host}/getAllTickets/`, {
             headers: {
                 'Authorization': tokenUse ? `Bearer ${tokenUse}` : ''
             }

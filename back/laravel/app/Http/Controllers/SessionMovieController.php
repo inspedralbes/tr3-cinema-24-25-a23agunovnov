@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\SessionMovie;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SessionMovieController extends Controller implements HasMiddleware
 {
-    public static function middleware(): array{
+    public static function middleware(): array
+    {
         return [
             new Middleware('auth:sanctum', except: ['index', 'show']),
         ];
     }
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -47,7 +50,8 @@ class SessionMovieController extends Controller implements HasMiddleware
                 'imdb' => 'required|string',
                 'title' => 'required|string',
                 'time' => 'required|string',
-                'date' => 'required|date'
+                'date' => 'required|date',
+                'vip' => 'required|boolean'
             ]);
 
             $seat_id = 0;
@@ -68,7 +72,8 @@ class SessionMovieController extends Controller implements HasMiddleware
                 'title' => $validated['title'],
                 'time' => $validated['time'],
                 'date' => $validated['date'],
-                'seats' => json_encode($seats)
+                'seats' => json_encode($seats),
+                'vip' => $validated['vip']
             ]);
 
             if (!$session) {
@@ -102,11 +107,33 @@ class SessionMovieController extends Controller implements HasMiddleware
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $imdbID)
+    public function update(Request $request, string $sesionID)
     {
         try {
-            $session = SessionMovie::where('imdb', $imdbID)->get()->first();
-            $session->seats = $request->seats;
+            $session = SessionMovie::find($sesionID);
+
+            $user = Auth::user();
+
+            if (!$user) {
+                return response()->json(['success' => false, 'message' => 'Usuario no autentificado'], 500);
+            }
+
+            if (!$session) {
+                return response()->json(['success' => false, 'message' => 'Sesión inexistente'], 404);
+            }
+
+            if ($request->seats) {
+                $session->seats = $request->seats;
+            } else if ($request->time && $request->date) {
+                $admin = Admin::where('email', $user->email)->first();
+                if (!$admin) {
+                    return response()->json(['success' => false, 'message' => 'No eres un administrador'], 403);
+                }
+
+                $session->date = $request->date;
+                $session->time = $request->time;
+            }
+
             $session->save();
 
             return response()->json(['success' => true, 'message' => $session], 200);
@@ -119,8 +146,28 @@ class SessionMovieController extends Controller implements HasMiddleware
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SessionMovie $session)
+    public function destroy(string $sesionID)
     {
-        //
+        try {
+            $session = SessionMovie::find( $sesionID);
+            
+            $user = Auth::user();
+            $admin = Admin::where('email', $user->email)->get()->first();
+
+            if (!$admin) {
+                return response()->json(['success' => false, 'message' => 'No eres un administrador'], 500);
+            }
+
+            if (!$session) {
+                return response()->json(['success' => false, 'message' => 'Sesión inexistente'], 404);
+            }
+
+            $session->delete();
+
+            return response()->json(['success' => true, 'message' => "Sesión eliminada con éxito"], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => 'We have a problem: ' . $e->getMessage()], 500);
+        }
     }
 }

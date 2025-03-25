@@ -3,14 +3,14 @@
 import { sessionCreate, getInfoMovie, viewSessions } from "@/app/plugins/communicationManager";
 import { useEffect, useState } from "react";
 import SessionComp from "@/components/SessionComp";
-import { usePopUp } from "@/context/TogglePopUps";
+import { PopUpProvider, usePopUp } from "@/context/TogglePopUps";
 
 export default function Page() {
   const [sesions, setSesions] = useState([]);
   const [movies, setMovies] = useState([]);
   const [dates, setDates] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { setSelectedSession, setEditedSession, setIsEditing } = Auth
+  const { selectedSession, setSelectedSession, setEditedSession, setIsEditing } = usePopUp();
 
   useEffect(() => {
     (async () => {
@@ -18,13 +18,14 @@ export default function Page() {
         const response = await verSesiones();
         setSesions(response);
 
-        console.log("Response: ", response);
+        // console.log("Response: ", response);
         const arrayDates = [];
         const arrayMovies = [];
 
         for (const sesion of response.data) {
           const info = await getInfoMovie(sesion.imdb);
           const movie = {
+            sesionID: sesion.id,
             imdb: info.imdbID,
             title: info.Title,
             year: info.Year,
@@ -33,6 +34,8 @@ export default function Page() {
             date: sesion.date,
             time: sesion.time,
           };
+
+          // console.log("Movie: ", movie);
 
           arrayMovies.push(movie);
 
@@ -53,14 +56,14 @@ export default function Page() {
         setDates(arrayDates);
         setMovies(arrayMovies);
 
-        console.log("ArrayMovies: ", arrayMovies);
+        // console.log("ArrayMovies: ", arrayMovies);
       } catch (error) {
         console.error("Error: ", error);
       } finally {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [selectedSession]);
 
   async function verSesiones() {
     try {
@@ -101,7 +104,7 @@ export default function Page() {
                   if (movie.date === date) {
                     return (
                       <div key={index} onClick={() => { handleOpenPopup(movie) }}>
-                        <div className="bg-white shadow-lg rounded-lg w-[180px] relative">
+                        <div className="bg-white shadow-lg rounded-lg w-[180px] relative cursor-pointer">
                           <img
                             src={movie.Poster}
                             alt={movie.title}
