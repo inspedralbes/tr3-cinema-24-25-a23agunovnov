@@ -35,7 +35,7 @@ class ClienteController extends Controller
             'name' => 'required|string',
             'phone' => 'required|string',
             'email' => 'required|email|unique:clientes,email',
-            'password' => 'required|string',
+            'password' => 'required|string|min:8',
         ]);
 
         if ($validator->fails()) {

@@ -10,6 +10,7 @@ export default function AuthComp({ onClose }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLogin, setIsLogin] = useState(true);
+    const [ errorMessage, setErrorMessage ] = useState('');
     const { login } = useAuth();
 
     async function handleSubmit(e) {
@@ -26,7 +27,7 @@ export default function AuthComp({ onClose }) {
                     login(response);
                     onClose();
                 } else {
-                    console.log("Ocurrió un problema al iniciar sesión: ", response)
+                    setErrorMessage('Credenciales incorrectas')
                 }
             } else {
                 const datos = {
@@ -76,12 +77,20 @@ export default function AuthComp({ onClose }) {
                                 className="w-full bg-gray-700 text-white px-6 py-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
                             />
                             <input
-                                type="text"
+                                type="tel"
                                 placeholder="Teléfono"
                                 value={telefono}
-                                onChange={(e) => setTelefono(e.target.value)}
+                                onChange={(e) => {
+                                    const value = e.target.value.replace(/[^0-9+]/g, "");
+                                    setTelefono(value);
+                                }}
+                                pattern="^\+?[0-9]{7,15}$"
+                                maxLength="15"
+                                autoComplete="tel"
                                 className="mt-6 w-full bg-gray-700 text-white px-6 py-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
+                                aria-label="Número de teléfono"
                             />
+
                         </div>
                     )}
 
@@ -98,16 +107,27 @@ export default function AuthComp({ onClose }) {
                     <div className="relative">
                         <input
                             type="password"
-                            placeholder="Contraseña"
+                            placeholder={!isLogin ? "Contraseña (mínimo 8 caracteres)" : "Contraseña"}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             className="w-full bg-gray-700 text-white px-6 py-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
                         />
+                        {isLogin && errorMessage !== '' && (
+                            <p className="text-red-400 text-sm mt-2">
+                                {errorMessage}
+                            </p>
+                        )}
+                        {!isLogin && password.length > 0 && password.length < 8 && (
+                            <p className="text-red-400 text-sm mt-2">
+                                La contraseña debe tener al menos 8 caracteres.
+                            </p>
+                        )}
                     </div>
 
                     <button
                         type="submit"
                         className="w-full bg-red-600 text-white py-4 rounded-md hover:bg-red-700 transition-colors font-medium cursor-pointer"
+                        disabled={!isLogin && password.length < 8}
                     >
                         {isLogin ? 'Iniciar sesión' : 'Registrarse'}
                     </button>
