@@ -16,9 +16,11 @@ export default function Login() {
         try {
             console.log(email, password);
             const response = await loginAdmin({email, password});
-            if(response.success) {
-                localStorage.setItem('tokenAdmin', response.token);
+            if(response.token) {
+                // localStorage.setItem('tokenAdmin', response.token);
                 router.push('/admin');
+            }else{
+                console.error("Error en el inicio de sesión");
             }
         } catch (error) {
             console.error("Error: ", error);

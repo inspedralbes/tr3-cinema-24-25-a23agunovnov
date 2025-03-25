@@ -34,7 +34,7 @@ export default function DashboardLayout({ children, onClick }) {
         }
     }
 
-    if(!token) {
+    if (pathname === '/admin/auth') {
         return (
             <main>
                 {children}

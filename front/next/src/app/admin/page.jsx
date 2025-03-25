@@ -5,14 +5,29 @@ import { useEffect, useState } from "react";
 export default function Page() {
   const [loading, setLoading] = useState(true);
   const [tickets, setTickets] = useState([]);
+  const [token, setToken] = useState(null);
   const [promedioVentas, setPromedioVentas] = useState(0);
 
   useEffect(() => {
     (async () => {
-      await verTicketsComprados();
-      setLoading(false);
+      if (!token) {
+        setToken(localStorage.getItem('tokenAdmin'));
+      } else {
+        console.log("ENTRA: ", token);
+        await verTicketsComprados();
+        setLoading(false);
+      }
     })();
   }, []);
+
+  useEffect(() => {
+    (async() => {
+      if(token){
+        await verTicketsComprados();
+        setLoading(false);
+      }
+    })();
+  }, [token])
 
   useEffect(() => {
     let total = 0;
@@ -33,7 +48,6 @@ export default function Page() {
       console.error("Error: ", error)
     }
   }
-
 
   function totalTickets() {
     let total = 0;

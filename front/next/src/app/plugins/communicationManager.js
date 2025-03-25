@@ -180,6 +180,9 @@ export async function loginAdmin(datos) {
             body: JSON.stringify(datos)
         })
         const data = await response.json();
+
+        localStorage.setItem('tokenAdmin', data.token);
+        console.log("Data: ", data);
         if (data.success) {
             return data;
         } else {
@@ -214,9 +217,10 @@ export async function registerAdmin(datos) {
 
 export async function getInfoSessions() {
     try {
+        const tokenUse = typeof window !== 'undefined' ? localStorage.getItem('tokenAdmin') : '';
         const response = await fetch (`${Host}/getAllTickets/`, {
             headers: {
-                'Authorization': tokenAdmin ? `Bearer ${tokenAdmin}` : ''
+                'Authorization': tokenUse ? `Bearer ${tokenUse}` : ''
             }
         });
         const data = await response.json();
