@@ -16,6 +16,8 @@ export default function MoviePage() {
     const [chooseSeats, setChooseSeats] = useState(false);
     const [clickedSeats, setClickedSeats] = useState([]);
     const [formattedDate, setFormattedDate] = useState('');
+    const [normalSeats, setNormalSeats] = useState([])
+    const [vipSeats, setVipSeats] = useState([])
     const { setLoginAuth } = useAuth();
     const router = useRouter();
 
@@ -24,6 +26,11 @@ export default function MoviePage() {
             await cargarData();
         })();
     }, []);
+
+    useEffect(() => {
+        setNormalSeats(clickedSeats?.filter((s) => s.row !== 6) || []);
+        setVipSeats(clickedSeats?.filter((s) => s.row === 6) || []);
+    }, [chooseSeats])
 
     useEffect(() => {
         console.log("SESION: ", sesion);
@@ -73,7 +80,7 @@ export default function MoviePage() {
     function calculateTotal() {
         let total;
         if (sesion.vip) {
-            total = clickedSeats.filter((s) => s.row === 6).length * 8 + clickedSeats.filter((s) => s.row !== 6).length * 6;
+            total = vipSeats.length * 8 + normalSeats.length * 6;
         } else {
             total = clickedSeats.length * 6;
         }
@@ -276,25 +283,41 @@ export default function MoviePage() {
                         <button className={`w-full py-2 rounded font-semibold transition flex items-center justify-center gap-2 cursor-pointer ${clickedSeats.length > 0 ? 'bg-red-600' : 'bg-gray-800 hover:bg-gray-700'}`} onClick={() => setChooseSeats(true)}>Elegir asientos</button>
 
                         <div className="border-t border-gray-800 pt-6 mb-6">
-                            {clickedSeats ? (
+                            {clickedSeats?.length > 0 && (
                                 <div>
-                                    <div className="flex justify-between mb-2">
-                                        <span>Ticket normal ({sesion.vip ? clickedSeats.filter((s) => s.row !== 6).length : clickedSeats.length} × <span className="font-bold">6€</span>)</span>
-                                        <span>${sesion.vip ? clickedSeats.filter((s) => s.row !== 6).length * 6 : calculateTotal()}</span>
-                                    </div>
-                                    {sesion.vip &&
+                                    {sesion.vip ? (
+                                        <>
+                                            <div className="flex justify-between mb-2">
+                                                <span>
+                                                    Ticket normal ({normalSeats.length} × <span className="font-bold">6€</span>)
+                                                </span>
+                                                <span>${normalSeats.length * 6}</span>
+                                            </div>
+                                            {vipSeats.length > 0 && (
+                                                <div className="flex justify-between mb-2">
+                                                    <span>
+                                                        Ticket VIP ({vipSeats.length} × <span className="font-bold">8€</span>)
+                                                    </span>
+                                                    <span>${vipSeats.length * 8}</span>
+                                                </div>
+                                            )}
+                                        </>
+                                    ) : (
                                         <div className="flex justify-between mb-2">
-                                            <span>Ticket VIP ({clickedSeats.filter((s) => s.row === 6).length} × <span className="font-bold">8€</span>)</span>
-                                            <span>${clickedSeats.filter((s) => s.row === 6).length * 8}</span>
+                                            <span>
+                                                Ticket normal ({clickedSeats.length} × <span className="font-bold">6€</span>)
+                                            </span>
+                                            <span>${clickedSeats.length * 6}</span>
                                         </div>
-                                    }
+                                    )}
                                 </div>
-                            ) : (null)}
+                            )}
                             <div className="flex justify-between font-bold">
                                 <span>Total</span>
                                 <span>${calculateTotal()}</span>
                             </div>
                         </div>
+
 
                         <button
                             className={`w-full py-3 rounded font-semibold transition flex items-center justify-center gap-2 ${clickedSeats.length > 0 && selectedDate !== '' && selectedTime !== '' > 0 ? ("bg-red-600 hover:bg-red-700 cursor-pointer") : ("bg-gray-400 hover:bg-gray-500 cursor-not-allowed")}`}
