@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { getInfoMovie, getSession, comprarTicket } from "@/app/plugins/communicationManager";
+import { getInfoMovie, getSession, comprarTicket, viewSessions } from "@/app/plugins/communicationManager";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import Swal from 'sweetalert2'
@@ -10,6 +10,7 @@ import socket from '@/services/socket';
 export default function MoviePage() {
     const { imdbID } = useParams();
     const [sesion, setSesion] = useState([]);
+    const [sesions, setSesions] = useState([]);
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
     const [seats, setSeats] = useState(sesion.seats || []);
@@ -23,6 +24,20 @@ export default function MoviePage() {
 
     useEffect(() => {
         (async () => {
+            try {
+                const response = await viewSessions();
+                if(response.data){
+                    const peliculasPromise = response.data.map(async (sesion) => {
+                        return await getInfoMovie(sesion.imdb)
+                    });
+                    const peliculas = await Promise.all(peliculasPromise);
+                    console.log("PELICULAS: ", peliculas);
+                    setSesions(peliculas);
+                }
+
+            } catch (error) {
+                console.error("Error: ", error)
+            }
             await cargarData();
         })();
     }, []);
@@ -128,7 +143,7 @@ export default function MoviePage() {
                     'total': calculateTotal()
                 }
                 try {
-                    const response = await comprarTicket(imdbID, seats, ticket);
+                    const response = await comprarTicket(ticket, seats);
                     if (response.newTicket.success) {
                         socket.emit('newTicket', ticket);
                         await cargarData();
@@ -175,8 +190,8 @@ export default function MoviePage() {
     }
 
     return <>
-        <div className="w-full h-screen bg-[#1a1a1a] flex justify-center text-white">
-            <div className="h-full w-full max-w-7xl">
+        <div className="w-full h-screen bg-[#1a1a1a] flex flex-col items-center justify-center text-white">
+            <div className="mb-20 w-full max-w-7xl">
                 {
                     chooseSeats &&
                     <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center" onClick={() => setChooseSeats(false)}>
@@ -334,6 +349,35 @@ export default function MoviePage() {
                         <p className="text-xs text-gray-400 text-center mt-4">
                             Si reservas, aceptas nuestros términos y condiciones
                         </p>
+                    </div>
+                </div>
+            </div>
+            <div className="w-full">
+                <h3 className="text-center text-xl font-semibold text-white mb-4">Películas Similares</h3>
+
+                <div className="w-full flex justify-center">
+                    <div
+                        id="movie-carousel"
+                        className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-4 w-6xl"
+                        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                    >
+                        {sesions.map((movie) => (
+                            <div
+                                key={movie.imdbID}
+                                className="flex-none w-48 cursor-pointer"
+                            >
+                                <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                                    <img
+                                        src={movie.Poster}
+                                        alt={movie.Title}
+                                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+                                <p className="mt-2 text-sm font-medium text-white truncate">
+                                    {movie.Title}
+                                </p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

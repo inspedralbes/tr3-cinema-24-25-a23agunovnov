@@ -3,6 +3,7 @@
 import { showTickets } from "@/app/plugins/communicationManager"
 import { useEffect, useState } from "react"
 import { useQRCode } from 'next-qrcode';
+import { Clock, Calendar, Film, MapPin } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Tickets() {
@@ -28,8 +29,10 @@ export default function Tickets() {
         for (let index = 0; index < data.data.length; index++) {
             data.data[index].seats = JSON.parse(data.data[index].seats);
         }
+
         setTickets(data);
     }
+
     return <>
         <div className="min-h-screen bg-[#1a1a1a] text-white py-8">
             <div className="max-w-7xl mx-auto px-4">
@@ -44,14 +47,8 @@ export default function Tickets() {
                                         key={ticket.id}
                                         className="bg-[#2a2a2a] rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow"
                                     >
-                                        <div className="relative h-48">
-                                            {/* <img
-                                                src={ticket.imageUrl}
-                                                alt={ticket.movieTitle}
-                                                className="w-full h-full object-cover"
-                                            /> */}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                                            <div className="absolute bottom-4 left-4">
+                                        <div className="">
+                                            <div className="p-4">
                                                 <h2 className="text-2xl font-bold">{ticket.sessions.title}</h2>
                                             </div>
                                         </div>
@@ -60,25 +57,25 @@ export default function Tickets() {
                                             <div className="grid grid-cols-2 gap-4">
                                                 {/* Fecha de la sesión */}
                                                 <div className="flex items-center space-x-2">
-                                                    {/* <Calendar className="h-5 w-5 text-gray-400" /> */}
+                                                    <Calendar className="h-5 w-5 text-gray-400" />
                                                     <span>{ticket.sessions.date}</span>
                                                 </div>
 
                                                 {/* Hora de la sesión */}
                                                 <div className="flex items-center space-x-2">
-                                                    {/* <Clock className="h-5 w-5 text-gray-400" /> */}
+                                                    <Clock className="h-5 w-5 text-gray-400" />
                                                     <span>{ticket.sessions.time}</span>
                                                 </div>
 
                                                 {/* Sala */}
                                                 <div className="flex items-center space-x-2">
-                                                    {/* <MapPin className="h-5 w-5 text-gray-400" /> */}
+                                                    <MapPin className="h-5 w-5 text-gray-400" />
                                                     <span>{ticket.sala}</span>
                                                 </div>
 
                                                 {/* Asientos */}
                                                 <div className="flex items-center space-x-2 col-span-2">
-                                                    {/* <Film className="h-5 w-5 text-gray-400" /> */}
+                                                    <Film className="h-5 w-5 text-gray-400" />
                                                     <span>Asientos:</span>
                                                     <div className="flex flex-wrap gap-2">
                                                         {ticket.seats.map((seat, index) => (

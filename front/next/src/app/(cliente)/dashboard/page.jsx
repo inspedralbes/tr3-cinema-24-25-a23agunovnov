@@ -60,11 +60,10 @@ export default function Page() {
     for (let offset = -4; offset <= 4; offset++) {
       let index = centerIndex + offset;
 
-      // Wrap around for negative indices
       if (index < 0) {
         index = totalMovies + index;
       }
-      // Wrap around for indices beyond array length
+
       if (index >= totalMovies) {
         index = index - totalMovies;
       }
@@ -85,18 +84,6 @@ export default function Page() {
       </div>
     );
   }
-
-  const getNextFiveDays = () => {
-    const days = [];
-    for (let i = 0; i < 5; i++) {
-      const date = new Date();
-      date.setDate(date.getDate() + i);
-      days.push({
-        fecha: date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }),
-      });
-    }
-    return days;
-  };
 
   return (
     <>

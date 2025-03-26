@@ -32,6 +32,7 @@ Route::prefix('/auth')->group(function () {
 });
 
 Route::apiResource('/session', SessionMovieController::class);
+Route::get('/allsessions', [SessionMovieController::class, 'getAll']);
 
 Route::apiResource('/ticket', TicketController::class)->middleware('auth:sanctum');
 Route::get('/getAllTickets', [TicketController::class, 'getAll'])->middleware('auth:sanctum');

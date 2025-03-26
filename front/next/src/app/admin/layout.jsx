@@ -17,7 +17,6 @@ export default function DashboardLayout({ children, onClick }) {
         { label: 'Dashboard', active: pathname === '/admin', link: '/admin' },
         { label: 'Crear funció', active: pathname === '/admin/crear', link: '/admin/crear' },
         { label: 'Sesions', active: pathname === '/admin/sesions', link: '/admin/sesions' },
-        { label: 'Movies', active: pathname == '/admin/movies', link: '/admin/movies' },
     ];
 
     useEffect(() => {

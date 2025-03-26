@@ -65,7 +65,19 @@ export async function searchMovie(title) {
 
 export async function viewSessions() {
     try {
+        const tokenAdmin = typeof window !== 'undefined' ? localStorage.getItem('tokenAdmin') : '';
         const response = await fetch(`${Host}/session`);
+        const data = response.json();
+
+        return data;
+    } catch (error) {
+        console.error("Error: ", error);
+    }
+}
+
+export async function viewAllSessions() {
+    try {
+        const response = await fetch(`${Host}/allsessions`);
         const data = response.json();
 
         return data;
@@ -84,10 +96,10 @@ export async function getSession(imdb) {
     }
 }
 
-export async function comprarTicket(imdbID, seats, ticket) {
+export async function comprarTicket(ticket, seats) {
     try {
         const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
-        const responseSeats = await fetch(`${Host}/session/${imdbID}`, {
+        const responseSeats = await fetch(`${Host}/session/${ticket.ID_session}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -147,8 +159,8 @@ export async function eliminarSesion(sesionID) {
         const response = await fetch(`${Host}/session/${sesionID}`, {
             method: 'DELETE',
             headers: {
-            'Content-Type': 'application/json',
-            'Authorization': tokenUse ? `Bearer ${tokenUse}` : ''
+                'Content-Type': 'application/json',
+                'Authorization': tokenUse ? `Bearer ${tokenUse}` : ''
             }
         });
 

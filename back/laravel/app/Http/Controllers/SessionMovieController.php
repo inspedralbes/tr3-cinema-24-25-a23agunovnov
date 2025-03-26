@@ -14,18 +14,26 @@ class SessionMovieController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('auth:sanctum', except: ['index', 'show']),
+            new Middleware('auth:sanctum', except: ['index', 'show', 'getAll']),
         ];
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         try {
-            // $sesiones = SessionMovie::where('date', '>=', today())->get();
+            
             $sesiones = SessionMovie::where('date', '>=', today())->get();
+            return response()->json(['success' => true, 'data' => $sesiones]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'We have a problem try-catch: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function getAll()
+    {
+        try {
+            
+            $sesiones = SessionMovie::all();
             return response()->json(['success' => true, 'data' => $sesiones]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'We have a problem try-catch: ' . $e->getMessage()], 500);
