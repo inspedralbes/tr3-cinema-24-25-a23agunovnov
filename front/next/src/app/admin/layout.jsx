@@ -7,8 +7,6 @@ import { PopUpProvider } from '@/context/TogglePopUps';
 
 export default function DashboardLayout({ children, onClick }) {
     const [token, setToken] = useState(null);
-    const [toggleDrop, setToggleDrop] = useState(false);
-    const [loginAuth, setLoginAuth] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const router = useRouter();
     const pathname = usePathname();

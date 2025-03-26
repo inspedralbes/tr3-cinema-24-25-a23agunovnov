@@ -180,8 +180,8 @@ export default function Page() {
           </div>
         </div>
 
-        <main className="container mx-auto px-4 py-8">
-          <p className='text-center text-white mb-7 text-4xl'>Més venuts</p>
+        <div className="container mx-auto px-4 py-8 pb-20">
+          <p className='text-center text-white mb-7 text-4xl'>Més populars</p>
           <div className="grid grid-cols-2 md:flex md:justify-center gap-6">
             {topMovies.length > 0 ? (
               topMovies.map((movie, index) => (
@@ -191,7 +191,7 @@ export default function Page() {
               <h1>No se encuentran resultados</h1>
             )}
           </div>
-        </main>
+        </div>
       </div >
 
     </>

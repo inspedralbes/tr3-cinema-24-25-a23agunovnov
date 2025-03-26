@@ -47,7 +47,7 @@ function DashboardContent({ children }) {
                             <h1 className="text-2xl font-bold cursor-pointer" onClick={() => router.push('/dashboard')}>Cinetix</h1>
                         </div>
                         <div className="flex items-center space-x-6 flex-1 justify-end overflow-hidden">
-                            <div className="relative md:w-full max-w-xl">
+                            <div className="hidden md:block relative md:w-full max-w-xl">
                                 <input
                                     type="text"
                                     placeholder="Buscar películas..."

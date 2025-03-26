@@ -16,7 +16,13 @@ class TicketController extends Controller
         try {
             $user = Auth::user();
 
-            $tickets = Ticket::where('ID_user', $user->id)->with('sessions:id,title,imdb,time,date')->orderBy('created_at', 'desc')->get();
+            $tickets = Ticket::where('ID_user', $user->id)
+            ->with('sessions:id,title,imdb,time,date')
+            ->whereHas('sessions', function ($query) {
+                $query->where('date', '>=', today());
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
 
             if (!$tickets) {
                 return response()->json(['success' => false, 'message' => 'We have a problem'], 500);
