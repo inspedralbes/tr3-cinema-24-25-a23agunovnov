@@ -1,5 +1,6 @@
 // const Host = "http://localhost:8000/api";
-const Host = "http://cinetix.daw.inspedralbes.cat/laravel/public/api";
+const Host = "http://cinetixback.daw.inspedralbes.cat/public/api";
+// const Host = "http://cinetixback.daw.inspedralbes.cat/api";
 const omdbAPI = "http://www.omdbapi.com/?apikey=ea676a76";
 
 const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';

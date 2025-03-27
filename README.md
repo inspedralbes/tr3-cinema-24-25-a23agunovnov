@@ -1,35 +1,34 @@
-# Cinetix - Portal de Cine
+# Cinetix - Portal de Cinema
 
 ## Desenvolupador: Agustín Enzo Noviello
 
-Este proyecto es un portal para un cine que integra tanto un panel de administración como un apartado para clientes.  
-El panel de administración permite gestionar información sobre ventas y administrar sesiones (crear, editar y eliminar).  
-El apartado para clientes ofrece la visualización de sesiones activas y la posibilidad de comprar entradas, enviando posteriormente un correo con un PDF de las entradas.
+Aquest projecte és un portal per a un cinema que integra tant un panell d'administració com un apartat per a clients.  
+El panell d'administració permet gestionar informació sobre vendes i administrar sessions (crear, editar i eliminar).
+L'apartat per a clients ofereix la visualització de sessions actives i la possibilitat de comprar entrades, enviant posteriorment un correu amb un PDF de les entrades.
 
-## Objetivo del Proyecto
+## Objectiu del Projecte
 
-El objetivo principal es generar un portal completo para un cine, que incluya:
+L'objectiu principal és generar un portal complet per a un cinema, que inclogui:
 
-- **Panel de Administración:**  
-  - Gestión de ventas.
-  - Creación, edición y eliminación de sesiones.
+- **Panell d'Administració:**  
+  - Gestió de vendes.
+  - Creació, edició i eliminació de sessions.
 
-- **Apartado para Clientes:**  
-  - Visualización de sesiones activas.
-  - Compra de entradas.
-  - Envío de correo con PDF de las entradas.
+- **Apartat per a Clients:**  
+  - Visualització de sessions actives.
+  - Compra d'entrades.
+  - Enviament de correu amb PDF de les entrades.
 
-## Estado del Proyecto
+## Estat del Projecte
 
-**En curso**
+**En curs**
 
-## Página Web
+## Pàgina Web
 
-El portal se encuentra hospedado en:  
+El portal es troba allotjat en:
 [cinetix.daw.inspedralbes.cat](http://cinetix.daw.inspedralbes.cat)
 
-## Flujo de Pantallas Iniciales
+## Flux de Pantalles Inicials
 
-El flujo de pantallas iniciales se puede consultar en Penpot:  
-[Ver flujo de pantallas](https://penpot.example.com/fake-link)  
-*Nota: Este enlace es temporal y se actualizará posteriormente.*
+El flux de pantalles inicials es pot consultar en Penpot:
+[Ver flujo de pantallas](https://penpot.example.com/fake-link)

@@ -20,7 +20,7 @@ jobs:
       - name: Preparar clau SSH amb permisos correctes
         run: |
           echo "${{ secrets.PROD_KEY }}" > ~/prod_key.pem
-          chmod 777 ~/prod_key.pem
+          chmod 600 ~/prod_key.pem
           ls -la ~/prod_key.pem
 
       - name: Verificar conexión SSH
