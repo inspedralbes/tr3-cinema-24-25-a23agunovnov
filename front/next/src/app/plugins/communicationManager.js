@@ -3,10 +3,13 @@ const Host = "http://cinetix.daw.inspedralbes.cat/laravel/public/api";
 const omdbAPI = "http://www.omdbapi.com/?apikey=ea676a76";
 
 const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+const tokenAdmin = typeof window !== 'undefined' ? localStorage.getItem('tokenAdmin') : '';
 
 // Crear sesión de película
 export async function sessionCreate(sesionData) {
     try {
+        const tokenUse = typeof window !== 'undefined' ? localStorage.getItem('tokenAdmin') : '';
+
         const movie = await fetch(`${omdbAPI}&i=${sesionData.imdb}`);
         const dataMovie = movie.json();
         if (dataMovie && dataMovie.Response === 'False') {
@@ -19,13 +22,14 @@ export async function sessionCreate(sesionData) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': token ? `Bearer ${token}` : ''
+                    'Authorization': tokenUse ? `Bearer ${tokenUse}` : ''
                 },
                 body: JSON.stringify({
                     "imdb": sesionData.imdb,
                     "title": sesionData.title,
                     "time": sesionData.time,
-                    "date": sesionData.date
+                    "date": sesionData.date,
+                    "vip": sesionData.vip
                 })
             });
             const data = response.json();
@@ -62,7 +66,19 @@ export async function searchMovie(title) {
 
 export async function viewSessions() {
     try {
+        const tokenAdmin = typeof window !== 'undefined' ? localStorage.getItem('tokenAdmin') : '';
         const response = await fetch(`${Host}/session`);
+        const data = response.json();
+
+        return data;
+    } catch (error) {
+        console.error("Error: ", error);
+    }
+}
+
+export async function viewAllSessions() {
+    try {
+        const response = await fetch(`${Host}/allsessions`);
         const data = response.json();
 
         return data;
@@ -81,9 +97,10 @@ export async function getSession(imdb) {
     }
 }
 
-export async function comprarTicket(imdbID, seats, ticket) {
+export async function comprarTicket(ticket, seats) {
     try {
-        const responseSeats = await fetch(`${Host}/session/${imdbID}`, {
+        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+        const responseSeats = await fetch(`${Host}/session/${ticket.ID_session}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -93,7 +110,7 @@ export async function comprarTicket(imdbID, seats, ticket) {
                 "seats": seats
             })
         });
-        const newSeats = responseSeats.json();
+        const newSeats = await responseSeats.json();
 
         const responseTicket = await fetch(`${Host}/ticket`, {
             method: 'POST',
@@ -103,12 +120,56 @@ export async function comprarTicket(imdbID, seats, ticket) {
             },
             body: JSON.stringify(ticket)
         });
-        const newTicket = responseTicket.json();
+        const newTicket = await responseTicket.json();
         const data = { newSeats, newTicket };
         return data;
     } catch (error) {
         console.error("Error: ", error);
         return null;
+    }
+}
+
+export async function editarSesion(datos) {
+    try {
+        const tokenUse = typeof window !== 'undefined' ? localStorage.getItem('tokenAdmin') : '';
+
+        const response = await fetch(`${Host}/session/${datos.sesionID}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': tokenUse ? `Bearer ${tokenUse}` : ''
+            },
+            body: JSON.stringify({
+                "time": datos.time,
+                "date": datos.date
+            })
+        });
+
+        const data = await response.json();
+
+        return data;
+    } catch (error) {
+        console.error("Error: ", error)
+    }
+}
+
+export async function eliminarSesion(sesionID) {
+    try {
+        const tokenUse = typeof window !== 'undefined' ? localStorage.getItem('tokenAdmin') : '';
+
+        const response = await fetch(`${Host}/session/${sesionID}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': tokenUse ? `Bearer ${tokenUse}` : ''
+            }
+        });
+
+        const data = await response.json();
+
+        return data;
+    } catch (error) {
+        console.error("Error: ", error)
     }
 }
 
@@ -179,6 +240,9 @@ export async function loginAdmin(datos) {
             body: JSON.stringify(datos)
         })
         const data = await response.json();
+
+        localStorage.setItem('tokenAdmin', data.token);
+        console.log("Data: ", data);
         if (data.success) {
             return data;
         } else {
@@ -213,11 +277,28 @@ export async function registerAdmin(datos) {
 
 export async function getInfoSessions() {
     try {
-        const response = await fetch (`${Host}/getAllTickets`, {
+        const tokenUse = typeof window !== 'undefined' ? localStorage.getItem('tokenAdmin') : '';
+        const response = await fetch(`${Host}/getAllTickets/`, {
+            headers: {
+                'Authorization': tokenUse ? `Bearer ${tokenUse}` : ''
+            }
+        });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error: ', error);
+    }
+}
+
+export async function logout() {
+    try {
+        const response = await fetch(`${Host}/auth/logout`, {
+            method: 'POST',
             headers: {
                 'Authorization': token ? `Bearer ${token}` : ''
             }
         });
+
         const data = await response.json();
         return data;
     } catch (error) {
