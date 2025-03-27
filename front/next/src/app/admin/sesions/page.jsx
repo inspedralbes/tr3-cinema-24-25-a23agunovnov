@@ -77,7 +77,7 @@ export default function Page() {
   if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center">
-        <p>Cargando...</p>
+        <p>Carregant...</p>
       </div>
     );
   }
@@ -94,7 +94,7 @@ export default function Page() {
         <SessionComp />
       }
       <div>
-        <h1 className="text-3xl font-bold text-center">Sesiones</h1>
+        <h1 className="text-3xl font-bold text-center">Sessions</h1>
         <div>
           {dates.map((date, index) => (
             <div key={index}>

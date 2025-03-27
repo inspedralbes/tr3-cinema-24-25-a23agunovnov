@@ -63,7 +63,7 @@ function DashboardContent({ children }) {
                                 </button>
                             ) : (
                                 <button onClick={() => setLoginAuth(true)} className="flex items-center space-x-2 bg-red-600 text-white px-6 py-3 rounded-md transition hover:bg-red-700 transition-colors cursor-pointer">
-                                    <span>Iniciar sesión</span>
+                                    <span>Iniciar sessió</span>
                                 </button>
                             )}
                         </div>
@@ -75,17 +75,17 @@ function DashboardContent({ children }) {
                                     data-popper-placement="bottom">
                                     <div className="px-4 py-3" role="none">
                                         <p className="text-sm text-gray-900 dark:text-white" role="none">
-                                            Bienvenido {user.user.name}
+                                            Benvingut {user.user.name}
                                         </p>
                                     </div>
                                     <ul className="py-1" role="none">
                                         <li onClick={() => { router.push('/tickets'); setToggleDrop(false); }} className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                             role="menuitem">
-                                            Mis tickets
+                                            Els meus tiquets
                                         </li>
                                         <li onClick={() => {logoutAuth(); setToggleDrop(false)}} className="cursor-pointer block px-4 py-2 text-sm text-red-700 hover:bg-gray-100"
                                             role="menuitem">
-                                            Cerrar sesión
+                                            Tancar sessió
                                         </li>
                                     </ul>
                                 </div>
@@ -102,12 +102,12 @@ function DashboardContent({ children }) {
                     {/* Company Info */}
                     <div>
                         <h3 className="text-xl font-bold text-white mb-4">Cinetix</h3>
-                        <p className="mb-4">Tu destino para las mejores experiencias cinematográficas</p>
+                        <p className="mb-4">El teu destí per a les millors experiències cinematogràfiques</p>
                     </div>
 
                     {/* Contact Info */}
                     <div>
-                        <h3 className="text-xl font-bold text-white mb-4">Contacto</h3>
+                        <h3 className="text-xl font-bold text-white mb-4">Contacte</h3>
                         <div className="space-y-2">
                             <div className="flex items-center">
                                 <Phone size={16} className="mr-2" />
@@ -119,14 +119,14 @@ function DashboardContent({ children }) {
                             </div>
                             <div className="flex items-center">
                                 <MapPin size={16} className="mr-2" />
-                                <span>Calle Principal 123, Madrid</span>
+                                <span>Calle Principal 123, Barcelona</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="border-t border-gray-700 mt-8 pt-6 text-center">
-                    <p>&copy; {new Date().getFullYear()} Cinetix. Todos los derechos reservados.</p>
+                    <p>&copy; {new Date().getFullYear()} Cinetix. Tots els drets reservats.</p>
                 </div>
             </div>
         </footer>

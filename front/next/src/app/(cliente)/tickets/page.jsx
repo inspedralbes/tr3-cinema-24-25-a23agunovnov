@@ -36,7 +36,7 @@ export default function Tickets() {
     return <>
         <div className="min-h-screen bg-[#1a1a1a] text-white py-8">
             <div className="max-w-7xl mx-auto px-4">
-                <h1 className="text-3xl font-bold mb-8">Mis Tickets</h1>
+                <h1 className="text-3xl font-bold mb-8">Els meus tiquets</h1>
 
                 {!loading ?
                     (
@@ -76,7 +76,7 @@ export default function Tickets() {
                                                 {/* Asientos */}
                                                 <div className="flex items-center space-x-2 col-span-2">
                                                     <Film className="h-5 w-5 text-gray-400" />
-                                                    <span>Asientos:</span>
+                                                    <span>Seients:</span>
                                                     <div className="flex flex-wrap gap-2">
                                                         {ticket.seats.map((seat, index) => (
                                                             <span key={index} className="bg-gray-700 px-2 py-1 rounded-lg text-sm">
@@ -105,7 +105,7 @@ export default function Tickets() {
                                                     />
                                                 </div>
                                                 <p className="text-center text-sm text-gray-400 mt-2">
-                                                    Muestra este código QR en la entrada
+                                                    Mostra aquest codi QR a l'entrada
                                                 </p>
                                             </div>
                                         </div>
@@ -113,10 +113,10 @@ export default function Tickets() {
                                 ))}
                             </div>
                         ) : (
-                            <h1>No se encuentran resultados</h1>
+                            <h1>No s'han trobat resultats</h1>
                         )
                     ) : (
-                        <h1>Cargando resultados</h1>
+                        <h1>Carregant resultats</h1>
                     )
                 }
             </div>

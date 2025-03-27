@@ -111,11 +111,11 @@ export default function Page() {
     const sessionDateTime = new Date(`${sesion.date}T${sesion.time}:00`);
     const sessionEndTime = new Date(sessionDateTime.getTime() + 2 * 3600 * 1000);
     if (now >= sessionDateTime && now <= sessionEndTime) {
-      return "En progreso";
+      return "En progrés";
     } else if (sessionDateTime > now) {
-      return "Pendiente";
+      return "Pendent";
     } else {
-      return "Finalizada";
+      return "Finalitzada";
     }
   }
 
@@ -126,7 +126,7 @@ export default function Page() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Ventas de hoy</p>
+                <p className="text-sm font-medium text-gray-500">Vendes d'avui</p>
                 <p className="text-2xl font-bold text-gray-900 mt-1">{!loading && totalTickets()} €</p>
               </div>
               <div className="bg-green-100 p-2 rounded-lg">
@@ -138,7 +138,7 @@ export default function Page() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Tickets Sold Today</p>
+                <p className="text-sm font-medium text-gray-500">Tiquets venuts avui</p>
                 <p className="text-2xl font-bold text-gray-900 mt-1">{!loading && tickets.data.length}</p>
               </div>
               <div className="bg-blue-100 p-3 rounded-lg">
@@ -149,7 +149,7 @@ export default function Page() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Promedio de ventas</p>
+                <p className="text-sm font-medium text-gray-500">Mitjana de vendes</p>
                 <p className="text-2xl font-bold text-gray-900 mt-1">{promedioVentas.toFixed(2)} €</p>
               </div>
               <div className="bg-purple-100 p-2 rounded-lg">
@@ -161,7 +161,7 @@ export default function Page() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Ocupación media</p>
+                <p className="text-sm font-medium text-gray-500">Mitjana d'ocupació</p>
                 <p className="text-2xl font-bold text-gray-900 mt-1">{ocupacioTotal()} %</p>
               </div>
               <div className="bg-orange-100 p-2 rounded-lg">
@@ -177,12 +177,12 @@ export default function Page() {
               <tr className="text-left">
                 <th className="py-3 px-2">Pel·licula</th>
                 <th className="py-3 px-2">Sala</th>
-                <th className="py-3 px-2">Fecha</th>
-                <th className="py-3 px-2">Hora</th>
-                <th className="py-3 px-2">Tickets venuts</th>
+                <th className="py-3 px-2">Data</th>
+                <th className="py-3 px-2">Horari</th>
+                <th className="py-3 px-2">Tiquets venuts</th>
                 <th className="py-3 px-2">Ocupació</th>
-                <th className="py-3 px-2">Ingresos generados</th>
-                <th className="py-3 px-2">Estado</th>
+                <th className="py-3 px-2">Ingressos generats</th>
+                <th className="py-3 px-2">Estat</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">

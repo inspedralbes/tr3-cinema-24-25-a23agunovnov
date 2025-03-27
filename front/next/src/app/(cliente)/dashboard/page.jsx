@@ -80,7 +80,7 @@ export default function Page() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 flex justify-center items-center">
-        <p>Cargando...</p>
+        <p>Carregant...</p>
       </div>
     );
   }
@@ -106,7 +106,7 @@ export default function Page() {
           <div className="relative z-10 md:my-20 my-5">
             <div className="w-full flex justify-center">
               <div className="w-full text-center md:text-left mt-3 mb-2 max-w-7xl items-center">
-                <h1 className="text-3xl font-bold text-white">Próximas funciones</h1>
+                <h1 className="text-3xl font-bold text-white">Pròximes funcions</h1>
               </div>
             </div>
 
@@ -168,7 +168,7 @@ export default function Page() {
                             ${isCenter ? 'py-3 text-lg' : 'py-2 text-base'}
                             `}
                             onClick={() => router.push(`/movie/${movie.imdbID}`)}>
-                            Comprar entradas
+                            Comprar entrades
                           </button>
                         </div>
                       </div>
@@ -188,7 +188,7 @@ export default function Page() {
                 <MovieComp key={index} movie={movie} />
               ))
             ) : (
-              <h1>No se encuentran resultados</h1>
+              <h1>No s'han trobat resultats</h1>
             )}
           </div>
         </div>

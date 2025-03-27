@@ -77,7 +77,7 @@ export default function Page() {
             <div className="max-w-7xl mx-auto px-4 py-8">
                 <div className="mb-6">
                     <h2 className="text-xl font-semibold text-gray-900">
-                        {movies.totalResults ? movies.totalResults : 0} resultados encontrados
+                        {movies.totalResults ? movies.totalResults : 0} resultats trobats
                     </h2>
                 </div>
 

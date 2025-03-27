@@ -78,11 +78,11 @@ export default function Page() {
             </label>
             <input type="text" name="imdb" className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required onChange={(e) => setImdb(e.target.value)} />
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Título de la película
+              Títol de la pel·lícula
             </label>
             <input type="text" className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required readOnly defaultValue={movieName} />
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Seleccione un horario
+              Seleccioni un horari
             </label>
             <select name="time" id="horario" className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required >
               <option value=""></option>
@@ -91,7 +91,7 @@ export default function Page() {
               <option value="20:00">20:00</option>
             </select>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Fecha de la función
+              Data de la funció
             </label>
             <input type="date" name="date" className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required id="date" />
             <input
@@ -126,11 +126,11 @@ export default function Page() {
                     </div>
                   ))
                 ) : (
-                  <h1>No se encuentran resultados</h1>
+                  <h1>No s'han trobat resultats</h1>
                 )}
               </ul>
             ) : (
-              <h1>Cargando resultados</h1>
+              <h1>Carregant resultats</h1>
             )
           }
         </div>

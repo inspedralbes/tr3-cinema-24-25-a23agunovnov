@@ -26,13 +26,13 @@ export default function Home() {
         {/* Hero Content */}
         <div className="relative z-10 flex flex-col items-center justify-center h-[calc(100vh-100px)] text-center px-4">
           <h2 className="text-5xl lg:text-6xl font-bold mb-4">
-            Compra Entradas para el Cine
+            Compra Entrades per al Cinema
           </h2>
           <p className="text-xl lg:text-2xl mb-6">
-            Disfruta de las mejores películas en la pantalla grande. Compra tus entradas de forma rápida y sencilla.
+          Gaudeix de les millors pel·lícules en la pantalla gran. Compra les teves entrades de manera ràpida i senzilla.
           </p>
           <button onClick={() => { router.push('/dashboard') }} className="bg-red-600 px-8 py-4 rounded font-medium hover:bg-red-700 transition flex items-center justify-center cursor-pointer">
-            Ver Sesiones Disponibles <ChevronRight className="w-5 h-5 ml-2" />
+          Veure Sessions Disponibles <ChevronRight className="w-5 h-5 ml-2" />
           </button>
         </div>
       </div>
@@ -40,21 +40,21 @@ export default function Home() {
       {/* FAQ Section */}
       <div className="max-w-4xl mx-auto py-24 px-4">
         <h2 className="text-4xl lg:text-5xl font-bold text-center mb-12">
-          Preguntas frecuentes
+        Preguntes freqüents
         </h2>
         <div className="space-y-4">
           {[
             {
-              question: "¿Qué es Cinetix?",
-              answer: "Cinetix es un portal online donde puedes comprar entradas para las mejores películas en tu cine local. Ofrecemos una plataforma fácil de usar para que puedas ver las sesiones disponibles, elegir tus asientos y realizar la compra de tus entradas rápidamente."
+              question: "Què és Cinetix?",
+              answer: "Cinetix és un portal en línia on pots comprar entrades per a les millors pel·lícules al teu cinema local. Oferim una plataforma fàcil d'usar perquè puguis veure les sessions disponibles, triar els teus seients i realitzar la compra de les teves entrades ràpidament."
             },
             {
-              question: "¿Cuánto cuesta comprar en Cinetix?",
-              answer: "Los precios varían según el tipo de entrada (normal o VIP). Con Cinetix, podrás disfrutar de precios accesibles y promociones especiales, todo con un sistema de pago seguro y rápido."
+              question: "Quant costa comprar en Cinetix?",
+              answer: "Els preus varien segons el tipus d'entrada (normal o VIP). Amb Cinetix, podràs gaudir de preus accessibles i promocions especials, tot amb un sistema de pagament segur i ràpid."
             },
             {
-              question: "¿Dónde puedo ver las películas de Cinetix?",
-              answer: "Consulta las sesiones disponibles de las películas en tu cine local a través de nuestro portal. Con Cinetix, podrás comprar entradas para ver las películas que más te gustan en el cine de tu ciudad, desde cualquier dispositivo conectado a internet."
+              question: "On puc veure les pel·lícules de Cinetix?",
+              answer: "Consulta les sessions disponibles de les pel·lícules al teu cinema local a través del nostre portal. Amb Cinetix, podràs comprar entrades per a veure les pel·lícules que més t'agraden al cinema de la teva ciutat, des de qualsevol dispositiu connectat a internet."
             }
           ].map((faq, index) => (
             <div key={index} className="bg-gray-900 rounded">
@@ -76,29 +76,28 @@ export default function Home() {
             <div>
               <h4 className="text-gray-400 mb-4">Cinetix</h4>
               <ul className="space-y-2 text-sm text-gray-500">
-                <li><a href="#" className="hover:underline">Centro de ayuda</a></li>
-                <li><a href="#" className="hover:underline">Términos de uso</a></li>
-                <li><a href="#" className="hover:underline">Privacidad</a></li>
+                <li><a href="#" className="hover:underline">Centre d'ajuda</a></li>
+                <li><a href="#" className="hover:underline">Termes d'ús</a></li>
+                <li><a href="#" className="hover:underline">Privacitat</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-gray-400 mb-4">Cuenta</h4>
+              <h4 className="text-gray-400 mb-4">Compte</h4>
               <ul className="space-y-2 text-sm text-gray-500">
-                <li><a href="#" className="hover:underline">Mi cuenta</a></li>
-                <li><a href="#" className="hover:underline">Formas de ver</a></li>
-                <li><a href="#" className="hover:underline">Información corporativa</a></li>
+                <li><a href="#" className="hover:underline">El meu compte</a></li>
+                <li><a href="#" className="hover:underline">Informació corporativa</a></li>
               </ul>
             </div>
             <div>
               <h4 className="text-gray-400 mb-4">Legal</h4>
               <ul className="space-y-2 text-sm text-gray-500">
-                <li><a href="#" className="hover:underline">Avisos legales</a></li>
+                <li><a href="#" className="hover:underline">Avisos legals</a></li>
                 <li><a href="#" className="hover:underline">Cookies</a></li>
-                <li><a href="#" className="hover:underline">Contacto</a></li>
+                <li><a href="#" className="hover:underline">Contacte</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-gray-400 mb-4">Síguenos</h4>
+              <h4 className="text-gray-400 mb-4">Segueix-nos</h4>
               <ul className="space-y-2 text-sm text-gray-500">
                 <li><a href="#" className="hover:underline">Facebook</a></li>
                 <li><a href="#" className="hover:underline">Twitter</a></li>
@@ -106,7 +105,7 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          <p className="text-gray-500 text-sm mt-8">© 2024 Cinetix. Todos los derechos reservados.</p>
+          <p className="text-gray-500 text-sm mt-8">© 2024 Cinetix. Tots els drets reservats.</p>
         </div>
       </footer>
     </div>

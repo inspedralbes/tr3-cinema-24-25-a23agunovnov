@@ -203,7 +203,7 @@ export default function MoviePage() {
                             onClick={(e) => e.stopPropagation()}
                         >
                             <p className="font-bold text-center mb-5 text-xl">
-                                Seleccionar asientos <span className="font-light text-base">(max 10)</span>
+                                Seleccionar seients <span className="font-light text-base">(max 10)</span>
                             </p>
                             {/* ASIENTOS */}
                             <div className="grid grid-cols-10 gap-2">
@@ -260,7 +260,7 @@ export default function MoviePage() {
                                     className="w-full bg-red-600 py-3 rounded font-semibold hover:bg-red-700 transition flex items-center justify-center gap-2 text-white"
                                     onClick={() => setChooseSeats(false)}
                                 >
-                                    Guardar selección
+                                    Guardar selecció
                                 </button>
                             </div>
                         </div>
@@ -286,20 +286,20 @@ export default function MoviePage() {
                                 <span className="text-gray-300 font-medium">Director:</span> {sesion.director}
                             </p>
                             <p>
-                                <span className="text-gray-300 font-medium">Cast:</span> {sesion.actors}
+                                <span className="text-gray-300 font-medium">Càsting:</span> {sesion.actors}
                             </p>
                             <p>
-                                <span className="text-gray-300 font-medium">Genre:</span> {sesion.genre}
+                                <span className="text-gray-300 font-medium">Gènere:</span> {sesion.genre}
                             </p>
                             <p>
-                                <span className="text-gray-300 font-medium">Released:</span> {sesion.released}
+                                <span className="text-gray-300 font-medium">Publicat:</span> {sesion.released}
                             </p>
                         </div>
                     </div>
                     <div className="bg-[#1a1a1a] rounded-lg w-full md:w-[18rem] p-4">
-                        <h2 className="text-2xl font-bold mb-4">Reservar Tickets</h2>
+                        <h2 className="text-2xl font-bold mb-4">Reservar Tiquets</h2>
                         <div className="mb-3">
-                            <label className="block text-sm font-medium mb-2">Selecciona fecha</label>
+                            <label className="block text-sm font-medium mb-2">Selecciona data</label>
                             <div className="grid grid-cols-2 gap-2">
                                 <button
                                     key={sesion.date}
@@ -312,7 +312,7 @@ export default function MoviePage() {
                             </div>
                         </div>
                         <div className="mb-6">
-                            <label className="block text-sm font-medium mb-2">Selecciona horario</label>
+                            <label className="block text-sm font-medium mb-2">Selecciona horari</label>
                             <div className="grid grid-cols-2 gap-2">
                                 <button
                                     key={sesion.showtime}
@@ -329,7 +329,7 @@ export default function MoviePage() {
                                 }`}
                             onClick={() => setChooseSeats(true)}
                         >
-                            Elegir asientos
+                            Triar seients
                         </button>
                         <div className="border-t border-gray-800 pt-6 mb-6">
                             {clickedSeats?.length > 0 && (
@@ -338,7 +338,7 @@ export default function MoviePage() {
                                         <>
                                             <div className="flex justify-between mb-2">
                                                 <span>
-                                                    Ticket normal ({normalSeats.length} ×{" "}
+                                                    Tiquet normal ({normalSeats.length} ×{" "}
                                                     <span className="font-bold">6€</span>)
                                                 </span>
                                                 <span>${normalSeats.length * 6}</span>
@@ -371,8 +371,8 @@ export default function MoviePage() {
                         </div>
                         <button
                             className={`w-full py-3 rounded font-semibold transition flex items-center justify-center gap-2 ${clickedSeats.length > 0 && selectedDate !== "" && selectedTime !== ""
-                                    ? "bg-red-600 hover:bg-red-700 cursor-pointer"
-                                    : "bg-gray-400 hover:bg-gray-500 cursor-not-allowed"
+                                ? "bg-red-600 hover:bg-red-700 cursor-pointer"
+                                : "bg-gray-400 hover:bg-gray-500 cursor-not-allowed"
                                 }`}
                             onClick={() => {
                                 if (clickedSeats.length > 0 && selectedDate !== "" && selectedTime !== "") {
@@ -383,13 +383,13 @@ export default function MoviePage() {
                             Reservar
                         </button>
                         <p className="text-xs text-gray-400 text-center mt-4">
-                            Si reservas, aceptas nuestros términos y condiciones
+                            Si reserves, acceptes els nostres termes i condicions
                         </p>
                     </div>
                 </div>
                 <div className="w-full mt-10 px-4">
                     <h3 className="text-center text-xl font-semibold text-white mb-4">
-                        Películas Similares
+                        Pel·lícules Similars
                     </h3>
                     <div className="w-full flex justify-center">
                         <div

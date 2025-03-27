@@ -31,7 +31,7 @@ export default function Login() {
         <div className="min-h-screen bg-red-900 flex items-center justify-center p-4">
             <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
-                    Iniciar Sesión
+                    Iniciar Sessió
                 </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -56,7 +56,7 @@ export default function Login() {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Contraseña
+                            Contrasenya
                         </label>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
