@@ -27,7 +27,7 @@ export default function AuthComp({ onClose }) {
                     login(response);
                     onClose();
                 } else {
-                    setErrorMessage('Credenciales incorrectas')
+                    setErrorMessage('Credencials incorrectes')
                 }
             } else {
                 const datos = {
@@ -40,7 +40,7 @@ export default function AuthComp({ onClose }) {
                 if (response && response.success) {
                     setIsLogin(true);
                 } else {
-                    console.log("Ocurrió un problema al registrarse: ", response)
+                    console.log("Va ocórrer un problema en registrar-se: ", response)
                 }
             }
         } catch (error) {
@@ -63,7 +63,7 @@ export default function AuthComp({ onClose }) {
                 </button>
 
                 <h2 className="text-3xl font-bold mb-8">
-                    {isLogin ? 'Iniciar sesión' : 'Registrarse'}
+                    {isLogin ? 'Iniciar sessió' : 'Registrar-se'}
                 </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -71,14 +71,14 @@ export default function AuthComp({ onClose }) {
                         <div className="relative">
                             <input
                                 type="text"
-                                placeholder="Nombre"
+                                placeholder="Nom"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 className="w-full bg-gray-700 text-white px-6 py-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
                             />
                             <input
                                 type="tel"
-                                placeholder="Teléfono"
+                                placeholder="Telèfon"
                                 value={telefono}
                                 onChange={(e) => {
                                     const value = e.target.value.replace(/[^0-9+]/g, "");
@@ -107,7 +107,7 @@ export default function AuthComp({ onClose }) {
                     <div className="relative">
                         <input
                             type="password"
-                            placeholder={!isLogin ? "Contraseña (mínimo 8 caracteres)" : "Contraseña"}
+                            placeholder={!isLogin ? "Contrasenya (mínim 8 caràcters)" : "Contrasenya"}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             className="w-full bg-gray-700 text-white px-6 py-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
@@ -119,7 +119,7 @@ export default function AuthComp({ onClose }) {
                         )}
                         {!isLogin && password.length > 0 && password.length < 8 && (
                             <p className="text-red-400 text-sm mt-2">
-                                La contraseña debe tener al menos 8 caracteres.
+                                La contrasenya ha de tenir al menys 8 caràcters.
                             </p>
                         )}
                     </div>
@@ -129,30 +129,30 @@ export default function AuthComp({ onClose }) {
                         className="w-full bg-red-600 text-white py-4 rounded-md hover:bg-red-700 transition-colors font-medium cursor-pointer"
                         disabled={!isLogin && password.length < 8}
                     >
-                        {isLogin ? 'Iniciar sesión' : 'Registrarse'}
+                        {isLogin ? 'Iniciar sessió' : 'Registrar-se'}
                     </button>
 
                     <div className="text-center text-gray-400">
                         {isLogin ? (
                             <p>
-                                ¿Primera vez en Cinetix?{' '}
+                                Primera vegada en Cinetix?{' '}
                                 <button
                                     type="button"
                                     onClick={() => setIsLogin(false)}
                                     className="text-white hover:underline cursor-pointer"
                                 >
-                                    Regístrate ahora
+                                    Registra't ara
                                 </button>
                             </p>
                         ) : (
                             <p>
-                                ¿Ya tienes una cuenta?{' '}
+                                Ja tens un compte?{' '}
                                 <button
                                     type="button"
                                     onClick={() => setIsLogin(true)}
                                     className="text-white hover:underline cursor-pointer"
                                 >
-                                    Inicia sesión
+                                    Inicia sessió
                                 </button>
                             </p>
                         )}

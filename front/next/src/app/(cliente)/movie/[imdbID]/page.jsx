@@ -149,16 +149,16 @@ export default function MoviePage() {
                         socket.emit('newTicket', ticket);
                         await cargarData();
                         Swal.fire({
-                            title: "Ticket comprado con éxito",
-                            text: "¡Disfruta de la película!",
+                            title: "Tiquet comprat amb èxit",
+                            text: "Gaudeix de la pel·lícula!",
                             icon: "success",
                             width: 600,
                             padding: "3em",
                             showConfirmButton: true,
-                            confirmButtonText: "Ver tickets",
-                            confirmButtonColor: "#007BFF", // Azul para el fondo del botón
+                            confirmButtonText: "Veure tiquets",
+                            confirmButtonColor: "#007BFF",
                             showCancelButton: true,
-                            cancelButtonText: "Cancelar",
+                            cancelButtonText: "Cancel·lar",
                             cancelButtonColor: "#d33",
                             color: "#000",
                             background: "#fff",
@@ -184,7 +184,7 @@ export default function MoviePage() {
                 setLoginAuth(true);
             }
         } else {
-            if (confirm("Has seleccionado un asiento ya ocupado, recarga la página")) {
+            if (confirm("Has seleccionat un seient ja ocupat, recàrrega la pàgina")) {
                 window.location.replace('');
             };
         }
