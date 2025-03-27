@@ -1,16 +1,34 @@
-# transversals
-Esquema mínim de carpetes pels projectes transversals
+# Cinetix - Portal de Cinema
 
-És obligatori seguir aquesta estructura tot i que la podeu ampliar.
+## Desenvolupador: Agustín Enzo Noviello
 
-## Atenció
-Un cop comenceu heu de canviar aquesta explicació amb la corresponent al vostre projecte (utilitzant markdown)
+Aquest projecte és un portal per a un cinema que integra tant un panell d'administració com un apartat per a clients.  
+El panell d'administració permet gestionar informació sobre vendes i administrar sessions (crear, editar i eliminar).
+L'apartat per a clients ofereix la visualització de sessions actives i la possibilitat de comprar entrades, enviant posteriorment un correu amb un PDF de les entrades.
 
-# Aquest fitxer ha de contenir com a mínim:
- * Nom dels integrants
- * Nom del projecte
- * Petita descripció
- * Adreça del gestor de tasques (taiga, jira, trello...)
- * Adreça del prototip gràfic del projecte (Penpot, figma, moqups...)
- * URL de producció (quan la tingueu)
- * Estat: (explicació d'en quin punt està)
+## Objectiu del Projecte
+
+L'objectiu principal és generar un portal complet per a un cinema, que inclogui:
+
+- **Panell d'Administració:**  
+  - Gestió de vendes.
+  - Creació, edició i eliminació de sessions.
+
+- **Apartat per a Clients:**  
+  - Visualització de sessions actives.
+  - Compra d'entrades.
+  - Enviament de correu amb PDF de les entrades.
+
+## Estat del Projecte
+
+**En curs**
+
+## Pàgina Web
+
+El portal es troba allotjat en:
+[cinetix.daw.inspedralbes.cat](http://cinetix.daw.inspedralbes.cat)
+
+## Flux de Pantalles Inicials
+
+El flux de pantalles inicials es pot consultar en Penpot:
+[Ver flujo de pantallas](https://penpot.example.com/fake-link)
