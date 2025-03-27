@@ -105,14 +105,6 @@ class SessionMovieController extends Controller implements HasMiddleware
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(SessionMovie $session)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $sesionID)

@@ -147,24 +147,4 @@ class TicketController extends Controller
             return response()->json(['error' => 'We have a problem try-catch: ' . $e->getMessage()], 500);
         }
     }
-
-    public function show(Ticket $ticket)
-    {
-        //
-    }
-
-    public function edit(Ticket $ticket)
-    {
-        //
-    }
-
-    public function update(Request $request, Ticket $ticket)
-    {
-        //
-    }
-
-    public function destroy(Ticket $ticket)
-    {
-        //
-    }
 }
